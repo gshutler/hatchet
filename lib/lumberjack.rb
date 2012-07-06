@@ -13,36 +13,37 @@ module Lumberjack
   def self.appenders
     @@appender ||= begin
       levels = {}
-      levels[nil] = :fatal
+      levels[nil] = :warn
       levels['Namespace::Something::Nested'] = :debug
-      [ConsoleAppender.new(StandardFormatter.new, levels)]
+      [IOAppender.new(STDOUT, StandardFormatter.new, levels)]
     end
   end
 
-  class ConsoleAppender
+  class IOAppender
 
-    LEVELS = [:debug, :info, :warn, :error, :fatal]
+    LEVELS = [:trace, :debug, :info, :warn, :error, :fatal, :off]
 
-    def initialize(formatter, levels)
+    def initialize(io, formatter, levels)
+      @io = io
       @formatter = formatter
       @levels = levels
     end
 
     def push(level, klass, msg)
       return unless enabled? klass, level
-      puts "#{@formatter.format(level, klass, msg)}\n"
+      @io.puts "#{@formatter.format(level, klass, msg)}\n"
     end
 
     def enabled?(klass, level)
       unless @levels.key? klass
-        level = @levels[nil]
+        lvl = @levels[nil]
         root = []
         klass.to_s.split('::').each do |part|
           root << part
           path = root.join '::'
-          level = @levels[path] if @levels.key? path
+          lvl = @levels[path] if @levels.key? path
         end
-        @levels[klass] = level
+        @levels[klass] = lvl
       end
       LEVELS.index(level) >= LEVELS.index(@levels[klass])
     end
@@ -69,7 +70,7 @@ module Lumberjack
       @appenders = appenders
     end
 
-    levels = [:debug, :info, :warn, :error, :fatal]
+    levels = [:trace, :debug, :info, :warn, :error, :fatal]
     levels.reverse.each do |level|
       lvls = levels.dup
       levels.pop
