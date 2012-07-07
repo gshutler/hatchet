@@ -1,20 +1,27 @@
-require_relative 'lumberjack/version'
-require 'logger'
+require_relative 'hatchet/version'
 
-module Lumberjack
+module Hatchet
 
-  def log
-    @log ||= Logger.new self, Lumberjack.appenders
+  def logger
+    @_hatchet_logger ||= Logger.new self, Hatchet.appenders
   end
 
-  alias_method :logger, :log
+  alias_method :log, :logger
+
+  def self.configure
+    @@config = Configuration.new
+    yield @@config
+    @@config.appenders.each do |appender|
+      appender.formatter ||= StandardFormatter.new
+      appender.levels    ||= @@config.levels
+    end
+  end
 
   def self.appenders
-    @@appender ||= begin
-      levels = {}
-      levels[nil] = :warn
-      levels['Namespace::Something'] = :debug
-      [LoggerAppender.new(StandardFormatter.new, levels, 'log/test.log')]
+    if @@config and @@config.appenders
+      @@config.appenders
+    else
+      []
     end
   end
 
@@ -22,32 +29,38 @@ module Lumberjack
 
     LEVELS = [:trace, :debug, :info, :warn, :error, :fatal, :off]
 
-    def initialize(formatter, levels, *args)
-      @logger = ::Logger.new(*args)
+    attr_accessor :levels
+
+    attr_accessor :logger
+
+    attr_accessor :formatter
+
+    def initialize(args = {})
+      @logger = args[:logger]
+      @formatter = args[:formatter]
+      yield self
       @logger.formatter = proc do |severity, datetime, progname, msg|
         "#{timestamp} [#{thread_name}] #{severity.ljust 5} #{msg}\n"
       end
-      @formatter = formatter
-      @levels = levels
     end
 
     def add(level, context, msg)
       return unless enabled? context, level
-      @logger.send level, "#{@formatter.format(context, msg)}"
+      @logger.send level, @formatter.format(context, msg)
     end
 
     def enabled?(context, level)
-      unless @levels.key? context
-        lvl = @levels[nil]
+      unless levels.key? context
+        lvl = levels[nil]
         root = []
         context.to_s.split('::').each do |part|
           root << part
           path = root.join '::'
-          lvl = @levels[path] if @levels.key? path
+          lvl = levels[path] if levels.key? path
         end
-        @levels[context] = lvl
+        levels[context] = lvl
       end
-      LEVELS.index(level) >= LEVELS.index(@levels[context])
+      LEVELS.index(level) >= LEVELS.index(levels[context])
     end
 
     private
@@ -74,6 +87,25 @@ module Lumberjack
 
   end
 
+  class Configuration
+
+    attr_reader :levels
+
+    attr_reader :appenders
+
+    def initialize
+      @levels = {}
+      @appenders = []
+      yield self if block_given?
+    end
+
+    def level(level, context = nil)
+      context = context.to_s unless context.nil?
+      @levels[context] = level
+    end
+
+  end
+
   class Logger
 
     def initialize(host, appenders)
@@ -81,21 +113,18 @@ module Lumberjack
       @appenders = appenders
     end
 
-    levels = [:trace, :debug, :info, :warn, :error, :fatal]
-    levels.reverse.each do |level|
-      lvls = levels.dup
-      levels.pop
+    [:trace, :debug, :info, :warn, :error, :fatal].reverse.each do |level|
       define_method level do |*args, &block|
         msg = args[0]
-        block = Proc.new { msg } unless msg.nil?
+        block = Proc.new { msg } unless msg.nil? or block
         return if block.nil?
-        append level, block
+        add level, block
       end
     end
 
     private
 
-    def append(level, msg)
+    def add(level, msg)
       @appenders.each { |appender| appender.add(level, @context, msg) }
     end
 

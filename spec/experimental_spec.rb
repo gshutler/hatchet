@@ -1,9 +1,10 @@
-require_relative '../lib/lumberjack'
+require_relative '../lib/hatchet'
+require 'logger'
 
 module Namespace
 
   class Foo
-    include Lumberjack
+    include Hatchet
 
     def work
       log.fatal { "Fatal! Woo!" }
@@ -12,15 +13,15 @@ module Namespace
   end
 
   module Something
-    extend Lumberjack
+    extend Hatchet
 
     def self.work
       log.info { "Woo!" }
-      log.debug { "Debug!" }
+      logger.debug { "Debug!" }
     end
 
     class Nested
-      include Lumberjack
+      include Hatchet
 
       def work
         log.debug { 'NESTED DEBUG' }
@@ -32,7 +33,16 @@ module Namespace
 
 end
 
-include Lumberjack
+Hatchet.configure do |config|
+  config.level :warn
+  config.level :debug, Namespace::Something::Nested
+
+  config.appenders << Hatchet::LoggerAppender.new do |appender|
+    appender.logger = Logger.new('log/test.log')
+  end
+end
+
+include Hatchet
 
 logger.warn 'From main'
 logger.warn self.inspect
