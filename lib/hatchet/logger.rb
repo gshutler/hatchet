@@ -79,9 +79,9 @@ module Hatchet
     #
     # host - The object hosting this logger.
     #
-    # Returns 'main' if this is the initial execution context of Ruby, the name
-    # of the module when the host is a module, otherwise the name of the
-    # object's class.
+    # Returns the String 'main' if this is the initial execution context of
+    # Ruby, the host itself when the host is a module, otherwise the object's
+    # class.
     def context(host)
       if host.inspect == 'main'
         'main'
