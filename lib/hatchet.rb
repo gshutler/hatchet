@@ -11,7 +11,7 @@ module Hatchet
 
   # Public: Returns a Logger for the object.
   #
-  # The returned logger has 7 methods. Those are, in decreasing order of
+  # The returned logger has 6 methods. Those are, in decreasing order of
   # severity:
   #
   #  * fatal
@@ -30,8 +30,8 @@ module Hatchet
   #   logger.info "Informational message"
   #   logger.info { "Informational message #{potentially_expensive}" }
   #
-  # Log messages are sent to every configured appender where they will be
-  # filtered and invoked as configured.
+  # Log messages are sent to appender where they will be filtered and invoked as
+  # configured.
   #
   # Returns a Logger for the object.
   def logger
@@ -40,7 +40,7 @@ module Hatchet
 
   # Public: Returns a logger for the object.
   #
-  # The returned logger has 7 methods. Those are, in decreasing order of
+  # The returned logger has 6 methods. Those are, in decreasing order of
   # severity:
   #
   #  * fatal
@@ -59,8 +59,8 @@ module Hatchet
   #   log.info "Informational message"
   #   log.info { "Informational message #{potentially_expensive}" }
   #
-  # Log messages are sent to every configured appender where they will be
-  # filtered and invoked as configured.
+  # Log messages are sent to appender where they will be filtered and invoked as
+  # configured.
   #
   # Returns a Logger for the object.
   alias_method :log, :logger
