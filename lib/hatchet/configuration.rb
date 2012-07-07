@@ -2,22 +2,22 @@
 
 module Hatchet
 
+  # Public: Class for configuring Hatchet.
+  #
   class Configuration
+    include LevelManager
 
-    attr_reader :levels
-
+    # Public: The Array of configured appenders.
+    #
     attr_reader :appenders
 
+    # Internal: Creates a new configuration.
+    #
+    # Creates the levels Hash with a default logging level of info.
+    #
     def initialize
-      @levels = {}
-      @levels[nil] = :info
+      @levels = { nil => :info }
       @appenders = []
-      yield self if block_given?
-    end
-
-    def level(level, context = nil)
-      context = context.to_s unless context.nil?
-      @levels[context] = level
     end
 
   end

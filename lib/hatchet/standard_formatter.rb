@@ -20,10 +20,15 @@ module Hatchet
 
     private
 
+    # Private: Returns the current time as a String.
+    #
     def timestamp
       Time.now.strftime('%Y-%m-%d %H:%M:%S.%L')
     end
 
+    # Private: Returns the name of the current thread from the processes pid and
+    # the threads object_id when it is not the main thread for the process.
+    #
     def thread_name
       if Thread.current == Thread.main
         Process.pid

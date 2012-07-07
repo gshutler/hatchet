@@ -8,14 +8,7 @@ module Hatchet
   # level log filtering.
   #
   class LoggerAppender
-
-    # Private: All the possible levels of log filter in order of severity.
-    #
-    LEVELS = [:debug, :info, :warn, :error, :fatal, :off]
-
-    # Public: The Hash containing the log level configuration.
-    #
-    attr_accessor :levels
+    include LevelManager
 
     # Public: The Logger the appender encapsulates.
     #
@@ -47,7 +40,7 @@ module Hatchet
     def initialize(options = {})
       @formatter = options[:formatter]
       @logger = options[:logger]
-      @levels = options[:levels]
+      @levels = options[:levels] || {}
 
       yield self if block_given?
 
@@ -70,29 +63,6 @@ module Hatchet
     def add(level, context, message)
       return unless enabled? level, context
       @logger.send level, @formatter.format(level, context, message)
-    end
-
-    # Internal: Returns true if the appender is configured to log messages of
-    # the given level within the given context, otherwise returns false.
-    #
-    # level   - The level of the message.
-    # context - The context of the message.
-    #
-    # Returns true if the appender is configured to log messages of the given
-    # level within the given context, otherwise returns false.
-    #
-    def enabled?(level, context)
-      unless self.levels.key? context
-        lvl = self.levels[nil]
-        root = []
-        context.to_s.split('::').each do |part|
-          root << part
-          path = root.join '::'
-          lvl = self.levels[path] if self.levels.key? path
-        end
-        self.levels[context] = lvl
-      end
-      LEVELS.index(level) >= LEVELS.index(self.levels[context])
     end
 
   end
