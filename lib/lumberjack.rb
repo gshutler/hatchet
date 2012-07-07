@@ -14,8 +14,8 @@ module Lumberjack
   def self.appenders
     @@appender ||= begin
       levels = {}
-      levels[nil] = :info
-      levels['Namespace::Something::Nested'] = :debug
+      levels[nil] = :off
+      levels['Namespace::Something'] = :debug
       [LoggerAppender.new(StandardFormatter.new, levels, 'log/test.log')]
     end
   end
@@ -71,7 +71,6 @@ module Lumberjack
   class StandardFormatter
 
     def format(klass, msg)
-      puts caller.inspect
       "#{klass} - #{msg.call}"
     end
 

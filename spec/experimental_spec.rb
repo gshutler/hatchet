@@ -7,7 +7,6 @@ module Namespace
 
     def work
       log.fatal { "Fatal! Woo!" }
-      log.info { "Woo!" }
     end
 
   end
@@ -35,11 +34,10 @@ end
 
 include Lumberjack
 
-2.times { log.info "WAT" }
-
-2.times do
-  Namespace::Foo.new.work
-  Namespace::Something.work
-  Namespace::Something::Nested.new.work
+10.times do
+  Thread.new { Namespace::Foo.new.work }
+  Thread.new { Namespace::Something.work }
+  Thread.new { Namespace::Something::Nested.new.work }
 end
 
+sleep 2
