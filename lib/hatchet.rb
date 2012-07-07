@@ -22,8 +22,8 @@ module Hatchet
   #  * trace
   #
   # All the methods have the same signature. You can either provide a message as
-  # a direct string, or as a block to the method (this is the recommended
-  # option).
+  # a direct string, or as a block to the method is lazily evaluated (this is
+  # the recommended option).
   #
   # Examples
   #
@@ -51,8 +51,8 @@ module Hatchet
   #  * trace
   #
   # All the methods have the same signature. You can either provide a message as
-  # a direct string, or as a block to the method (this is the recommended
-  # option).
+  # a direct string, or as a block to the method is lazily evaluated (this is
+  # the recommended option).
   #
   # Examples
   #

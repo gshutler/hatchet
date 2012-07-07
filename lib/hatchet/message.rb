@@ -19,7 +19,6 @@ module Hatchet
     # Examples
     #
     #   Message.new "Evaluated message"
-    #
     #   Message.new { "Lazily evaluated message" }
     #
     def initialize(message = nil, &block)
