@@ -11,7 +11,7 @@ module Hatchet
 
   # Public: Returns a Logger for the object.
   #
-  # The returned logger has 6 methods. Those are, in decreasing order of
+  # The returned logger has 5 methods. Those are, in decreasing order of
   # severity:
   #
   #  * fatal
@@ -19,7 +19,6 @@ module Hatchet
   #  * warn
   #  * info
   #  * debug
-  #  * trace
   #
   # All the methods have the same signature. You can either provide a message as
   # a direct string, or as a block to the method is lazily evaluated (this is
@@ -41,7 +40,7 @@ module Hatchet
 
   # Public: Returns a logger for the object.
   #
-  # The returned logger has 6 methods. Those are, in decreasing order of
+  # The returned logger has 5 methods. Those are, in decreasing order of
   # severity:
   #
   #  * fatal
@@ -49,7 +48,6 @@ module Hatchet
   #  * warn
   #  * info
   #  * debug
-  #  * trace
   #
   # All the methods have the same signature. You can either provide a message as
   # a direct string, or as a block to the method is lazily evaluated (this is
