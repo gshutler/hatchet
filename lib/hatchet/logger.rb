@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 module Hatchet
 
   class Logger
@@ -8,11 +10,9 @@ module Hatchet
     end
 
     [:trace, :debug, :info, :warn, :error, :fatal].each do |level|
-      define_method level do |*args, &block|
-        msg = args[0]
-        block = Proc.new { msg } unless msg.nil? or block
-        return if block.nil?
-        add level, block
+      define_method level do |msg = nil, &block|
+        return unless msg or block
+        add level, Message.new(msg, &block)
       end
     end
 
