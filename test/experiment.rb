@@ -6,7 +6,7 @@ module Namespace
     include Hatchet
 
     def work
-      log.fatal { "Fatal! Woo!" }
+      log.fatal { "Fatal message will be shown" }
     end
   end
 
@@ -14,22 +14,22 @@ module Namespace
     extend Hatchet
 
     def self.work
-      log.info { "Woo!" }
-      logger.debug { "Debug!" }
+      log.info { "Info message will be shown" }
+      logger.debug { "Debug message won't be shown" }
     end
 
     class Nested
       include Hatchet
 
       def work
-        log.debug { 'NESTED DEBUG' }
+        log.debug { "Debug message will be shown due to override" }
       end
     end
   end
 end
 
 Hatchet.configure do |config|
-  config.level :warn
+  config.level :info
   config.level :debug, Namespace::Something::Nested
 
   config.appenders << Hatchet::LoggerAppender.new do |appender|
@@ -39,13 +39,9 @@ end
 
 include Hatchet
 
-logger.warn 'From main'
-logger.warn self.inspect
+log.warn 'Warn message will be shown'
+thread = Thread.new { Namespace::Foo.new.work }
+Namespace::Something.work
+Namespace::Something::Nested.new.work
 
-10.times do
-  Thread.new { Namespace::Foo.new.work }
-  Namespace::Something.work
-  Thread.new { Namespace::Something::Nested.new.work }
-end
-
-sleep 0.1
+thread.join

@@ -50,17 +50,17 @@ module Hatchet
     end
 
     def enabled?(context, level)
-      unless levels.key? context
-        lvl = levels[nil]
+      unless self.levels.key? context
+        lvl = self.levels[nil]
         root = []
         context.to_s.split('::').each do |part|
           root << part
           path = root.join '::'
-          lvl = levels[path] if levels.key? path
+          lvl = self.levels[path] if self.levels.key? path
         end
-        levels[context] = lvl
+        self.levels[context] = lvl
       end
-      LEVELS.index(level) >= LEVELS.index(levels[context])
+      LEVELS.index(level) >= LEVELS.index(self.levels[context])
     end
 
     private
@@ -71,7 +71,7 @@ module Hatchet
 
     def thread_name
       if Thread.current == Thread.main
-        "#{Process.pid}#main"
+        Process.pid
       else
         "#{Process.pid}##{Thread.current.object_id}"
       end
