@@ -26,14 +26,16 @@ module Lumberjack
 
     def initialize(formatter, levels, *args)
       @logger = ::Logger.new(*args)
-      @logger.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n" }
+      @logger.formatter = proc do |severity, datetime, progname, msg|
+        "#{timestamp} [#{thread_name}] #{severity.ljust 5} #{msg}\n"
+      end
       @formatter = formatter
       @levels = levels
     end
 
-    def push(level, klass, msg)
+    def add(level, klass, msg)
       return unless enabled? klass, level
-      @logger.send level, "#{@formatter.format(level, klass, msg)}"
+      @logger.send level, "#{@formatter.format(klass, msg)}"
     end
 
     def enabled?(klass, level)
@@ -50,17 +52,27 @@ module Lumberjack
       LEVELS.index(level) >= LEVELS.index(@levels[klass])
     end
 
-  end
+    private
 
-  class StandardFormatter
+    def timestamp
+      Time.now.strftime('%Y-%m-%d %H:%M:%S.%L')
+    end
 
-    def format(level, klass, msg)
-      thread = if Thread.current == Thread.main
+    def thread_name
+      if Thread.current == Thread.main
         "#{Process.pid}#main"
       else
         "#{Process.pid}##{Thread.current.object_id}"
       end
-      "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} [#{thread}] #{level.to_s.upcase.ljust 5} #{klass} - #{msg.call}"
+    end
+
+  end
+
+  class StandardFormatter
+
+    def format(klass, msg)
+      puts caller.inspect
+      "#{klass} - #{msg.call}"
     end
 
   end
@@ -87,7 +99,7 @@ module Lumberjack
     private
 
     def append(level, msg)
-      @appenders.each { |appender| appender.push(level, @class, msg) }
+      @appenders.each { |appender| appender.add(level, @class, msg) }
     end
 
   end
