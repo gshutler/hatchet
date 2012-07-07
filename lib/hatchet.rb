@@ -34,6 +34,7 @@ module Hatchet
   # configured.
   #
   # Returns a Logger for the object.
+  #
   def logger
     @_hatchet_logger ||= Logger.new self, Hatchet.appenders
   end
@@ -63,6 +64,7 @@ module Hatchet
   # configured.
   #
   # Returns a Logger for the object.
+  #
   alias_method :log, :logger
 
   def self.configure

@@ -6,6 +6,7 @@ module Hatchet
   # they can be treated identically.
   #
   # Blocks will be lazily evaluated once for all appenders when required.
+  #
   class Message
 
     # Internal: Creates a new message.
@@ -27,6 +28,7 @@ module Hatchet
     end
 
     # Internal: Returns the String representation of the message.
+    #
     def to_s
       @message ||= @block.call
     end
