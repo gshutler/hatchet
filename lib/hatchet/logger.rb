@@ -25,6 +25,7 @@ module Hatchet
   #
   # Log messages are sent to each appender where they will be filtered and
   # invoked as configured.
+  #
   class Logger
 
     # Internal: Creates a new logger.
@@ -46,6 +47,7 @@ module Hatchet
     # block is preferred as it is assumed to provide more detail.
     #
     # Returns nothing.
+    #
     [:trace, :debug, :info, :warn, :error, :fatal].each do |level|
       define_method level do |message = nil, &block|
         return unless message or block
@@ -71,6 +73,7 @@ module Hatchet
     #           configured to log at the given level or lower.
     #
     # Returns nothing.
+    #
     def add(level, message)
       @appenders.each { |appender| appender.add(level, @context, message) }
     end
@@ -82,6 +85,7 @@ module Hatchet
     # Returns the String 'main' if this is the initial execution context of
     # Ruby, the host itself when the host is a module, otherwise the object's
     # class.
+    #
     def context(host)
       if host.inspect == 'main'
         'main'
