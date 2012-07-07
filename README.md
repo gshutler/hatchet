@@ -57,7 +57,6 @@ module Bar
 end
 ```
 
-
 ## Contributing
 
 1. Fork it

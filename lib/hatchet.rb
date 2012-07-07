@@ -114,7 +114,7 @@ module Hatchet
       @appenders = appenders
     end
 
-    [:trace, :debug, :info, :warn, :error, :fatal].reverse.each do |level|
+    [:trace, :debug, :info, :warn, :error, :fatal].each do |level|
       define_method level do |*args, &block|
         msg = args[0]
         block = Proc.new { msg } unless msg.nil? or block
