@@ -1,4 +1,5 @@
 require_relative 'lumberjack/version'
+require 'logger'
 
 module Lumberjack
 
@@ -13,25 +14,26 @@ module Lumberjack
   def self.appenders
     @@appender ||= begin
       levels = {}
-      levels[nil] = :warn
+      levels[nil] = :info
       levels['Namespace::Something::Nested'] = :debug
-      [IOAppender.new(STDOUT, StandardFormatter.new, levels)]
+      [LoggerAppender.new(StandardFormatter.new, levels, 'log/test.log')]
     end
   end
 
-  class IOAppender
+  class LoggerAppender
 
     LEVELS = [:trace, :debug, :info, :warn, :error, :fatal, :off]
 
-    def initialize(io, formatter, levels)
-      @io = io
+    def initialize(formatter, levels, *args)
+      @logger = ::Logger.new(*args)
+      @logger.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n" }
       @formatter = formatter
       @levels = levels
     end
 
     def push(level, klass, msg)
       return unless enabled? klass, level
-      @io.puts "#{@formatter.format(level, klass, msg)}\n"
+      @logger.send level, "#{@formatter.format(level, klass, msg)}"
     end
 
     def enabled?(klass, level)
@@ -54,11 +56,11 @@ module Lumberjack
 
     def format(level, klass, msg)
       thread = if Thread.current == Thread.main
-        "pid:#{Process.pid}"
+        "#{Process.pid}#main"
       else
-        "pid:#{Process.pid},thread:#{Thread.current.object_id}"
+        "#{Process.pid}##{Thread.current.object_id}"
       end
-      "#{level.to_s.upcase.ljust 5} #{Time.now} [#{thread}] #{klass.to_s.ljust 28} - #{msg.call}"
+      "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} [#{thread}] #{level.to_s.upcase.ljust 5} #{klass} - #{msg.call}"
     end
 
   end
