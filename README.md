@@ -23,7 +23,7 @@ Or install it yourself as:
 
 ```ruby
 Hatchet.configure do |config|
-  # Set the level to use unless overridden (required)
+  # Set the level to use unless overridden (defaults to :info)
   config.level :info
   # Set the level for a specific class/module and its children (can be a string)
   config.level :debug, Namespace::Something::Nested

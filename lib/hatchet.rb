@@ -95,6 +95,7 @@ module Hatchet
 
     def initialize
       @levels = {}
+      @levels[nil] = :info
       @appenders = []
       yield self if block_given?
     end
