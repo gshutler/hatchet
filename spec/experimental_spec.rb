@@ -34,10 +34,13 @@ end
 
 include Lumberjack
 
+logger.warn 'From main'
+logger.warn self.inspect
+
 10.times do
   Thread.new { Namespace::Foo.new.work }
-  Thread.new { Namespace::Something.work }
+  Namespace::Something.work
   Thread.new { Namespace::Something::Nested.new.work }
 end
 
-sleep 2
+sleep 0.1

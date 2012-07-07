@@ -3,18 +3,16 @@ require 'logger'
 
 module Lumberjack
 
-  def info
-    log.info self, &block
-  end
-
   def log
     @log ||= Logger.new self, Lumberjack.appenders
   end
 
+  alias_method :logger, :log
+
   def self.appenders
     @@appender ||= begin
       levels = {}
-      levels[nil] = :off
+      levels[nil] = :warn
       levels['Namespace::Something'] = :debug
       [LoggerAppender.new(StandardFormatter.new, levels, 'log/test.log')]
     end
@@ -33,23 +31,23 @@ module Lumberjack
       @levels = levels
     end
 
-    def add(level, klass, msg)
-      return unless enabled? klass, level
-      @logger.send level, "#{@formatter.format(klass, msg)}"
+    def add(level, context, msg)
+      return unless enabled? context, level
+      @logger.send level, "#{@formatter.format(context, msg)}"
     end
 
-    def enabled?(klass, level)
-      unless @levels.key? klass
+    def enabled?(context, level)
+      unless @levels.key? context
         lvl = @levels[nil]
         root = []
-        klass.to_s.split('::').each do |part|
+        context.to_s.split('::').each do |part|
           root << part
           path = root.join '::'
           lvl = @levels[path] if @levels.key? path
         end
-        @levels[klass] = lvl
+        @levels[context] = lvl
       end
-      LEVELS.index(level) >= LEVELS.index(@levels[klass])
+      LEVELS.index(level) >= LEVELS.index(@levels[context])
     end
 
     private
@@ -70,8 +68,8 @@ module Lumberjack
 
   class StandardFormatter
 
-    def format(klass, msg)
-      "#{klass} - #{msg.call}"
+    def format(context, msg)
+      "#{context} - #{msg.call}"
     end
 
   end
@@ -79,7 +77,7 @@ module Lumberjack
   class Logger
 
     def initialize(host, appenders)
-      @class = host.class == Module ? host : host.class
+      @context = context host
       @appenders = appenders
     end
 
@@ -98,7 +96,17 @@ module Lumberjack
     private
 
     def append(level, msg)
-      @appenders.each { |appender| appender.add(level, @class, msg) }
+      @appenders.each { |appender| appender.add(level, @context, msg) }
+    end
+
+    def context(host)
+      if host.inspect == 'main'
+        'main'
+      elsif host.class == Module
+        host
+      else
+        host.class
+      end
     end
 
   end
