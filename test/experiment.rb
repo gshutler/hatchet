@@ -2,14 +2,12 @@ require_relative '../lib/hatchet'
 require 'logger'
 
 module Namespace
-
   class Foo
     include Hatchet
 
     def work
       log.fatal { "Fatal! Woo!" }
     end
-
   end
 
   module Something
@@ -26,11 +24,8 @@ module Namespace
       def work
         log.debug { 'NESTED DEBUG' }
       end
-
     end
-
   end
-
 end
 
 Hatchet.configure do |config|
