@@ -5,7 +5,8 @@ module Hatchet
   # Internal: Class that handles logging calls and distributes them to all its
   # appenders.
   #
-  # Each logger has 5 methods. Those are, in decreasing order of severity:
+  # Each logger has 5 logging methods. Those are, in decreasing order of
+  # severity:
   #
   #  * fatal
   #  * error
@@ -13,7 +14,7 @@ module Hatchet
   #  * info
   #  * debug
   #
-  # All the methods have the same signature. You can either provide a message as
+  # All these methods have the same signature. You can either provide a message as
   # a direct string, or as a block to the method is lazily evaluated (this is
   # the recommended option).
   #
@@ -24,6 +25,19 @@ module Hatchet
   #
   # Log messages are sent to each appender where they will be filtered and
   # invoked as configured.
+  #
+  # Each logger also has 5 inspection methods. Those are, in decreasing order of
+  # severity:
+  #
+  #  * fatal?
+  #  * error?
+  #  * warn?
+  #  * info?
+  #  * debug?
+  #
+  # All these methods take no arguments and return true if any of the loggers'
+  # appenders will log a message at that level for the current context,
+  # otherwise they will return false.
   #
   class HatchetLogger
 
