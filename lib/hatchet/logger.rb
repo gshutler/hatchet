@@ -38,21 +38,30 @@ module Hatchet
       @appenders = appenders
     end
 
-    # Public: Logs a message at the given level.
-    #
-    # message - An already evaluated message, usually a String (default: nil).
-    # block   - An optional block which will provide a message when invoked.
-    #
-    # One of message or block must be provided. If both are provided then the
-    # block is preferred as it is assumed to provide more detail.
-    #
-    # Returns nothing.
-    #
     [:trace, :debug, :info, :warn, :error, :fatal].each do |level|
+
+      # Public: Logs a message at the given level.
+      #
+      # message - An already evaluated message, usually a String (default: nil).
+      # block   - An optional block which will provide a message when invoked.
+      #
+      # One of message or block must be provided. If both are provided then the
+      # block is preferred as it is assumed to provide more detail.
+      #
+      # Returns nothing.
+      #
       define_method level do |message = nil, &block|
         return unless message or block
         add level, Message.new(message, &block)
       end
+
+      # Public: Returns true if any of the appenders will log messages for the
+      # current context, otherwise returns false.
+      #
+      define_method "#{level}?" do
+        @appenders.any? { |appender| appender.enabled? @context }
+      end
+
     end
 
     private
