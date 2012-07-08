@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 
 require_relative 'spec_helper'
-require 'ostruct'
 
 describe LoggerAppender do
   let(:logger)    { LoggerDouble.new }
@@ -45,28 +44,6 @@ describe LoggerAppender do
       assert 'Context',      message.context
       assert 'Hello, World', message.message
     end
-  end
-end
-
-class LoggerDouble
-  attr_accessor :level
-  attr_accessor :formatter
-  attr_reader :messages
-
-  def initialize
-    @messages = []
-  end
-
-  [:debug, :info, :warn, :error, :fatal].each do |level|
-    define_method level do |message|
-      messages << OpenStruct.new(level: level, message: message)
-    end
-  end
-end
-
-class SimpleFormatter
-  def format(level, context, message)
-    OpenStruct.new(level: level, context: context, message: message)
   end
 end
 

@@ -1,11 +1,8 @@
 # -*- encoding: utf-8 -*-
 
 require_relative 'spec_helper'
-require 'ostruct'
 
 describe Hatchet::Logger do
-  ALL_LEVELS = [:debug, :info, :warn, :error, :fatal]
-
   let(:appender)  { StoringAppender.new :debug }
   let(:appenders) { [appender] }
   let(:context)   { Context::Class.new }
@@ -104,26 +101,5 @@ describe Hatchet::Logger do
       end
     end
   end
-end
-
-INITIAL_EXECUTION_CONTEXT = self
-
-class StoringAppender
-  include LevelManager
-
-  attr_reader :messages
-
-  def initialize(default_level)
-    @messages = []
-    @levels = { nil => default_level }
-  end
-
-  def add(level, context, message)
-    @messages << OpenStruct.new(level: level, context: context, message: message)
-  end
-end
-
-module Context
-  class Class ; end
 end
 
