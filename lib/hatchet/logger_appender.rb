@@ -45,7 +45,7 @@ module Hatchet
       yield self if block_given?
 
       @logger.level = ::Logger::DEBUG
-      return unless @logger.instance_of? Logger
+      return unless @logger.respond_to? :formatter
 
       # Wipe the format of the core Logger. The Rails.logger doesn't have this
       # method for example.
