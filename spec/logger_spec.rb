@@ -2,11 +2,11 @@
 
 require_relative 'spec_helper'
 
-describe Hatchet::Logger do
+describe HatchetLogger do
   let(:appender)  { StoringAppender.new :debug }
   let(:appenders) { [appender] }
   let(:context)   { Context::Class.new }
-  let(:subject)   { Hatchet::Logger.new context, appenders }
+  let(:subject)   { HatchetLogger.new context, appenders }
 
   ALL_LEVELS.each do |level|
     describe "receiving #{level} messages" do

@@ -25,7 +25,7 @@ module Hatchet
   # Log messages are sent to each appender where they will be filtered and
   # invoked as configured.
   #
-  class Logger
+  class HatchetLogger
 
     # Internal: Creates a new logger.
     #

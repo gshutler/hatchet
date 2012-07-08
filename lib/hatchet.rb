@@ -2,7 +2,7 @@
 
 require_relative 'hatchet/level_manager'
 require_relative 'hatchet/configuration'
-require_relative 'hatchet/logger'
+require_relative 'hatchet/hatchet_logger'
 require_relative 'hatchet/logger_appender'
 require_relative 'hatchet/message'
 require_relative 'hatchet/standard_formatter'
@@ -46,7 +46,7 @@ module Hatchet
   # Returns a Logger for the object.
   #
   def logger
-    @_hatchet_logger ||= Logger.new self, Hatchet.appenders
+    @_hatchet_logger ||= HatchetLogger.new self, Hatchet.appenders
   end
 
   # Public: Returns a logger for the object.
@@ -110,6 +110,17 @@ module Hatchet
       appender.formatter ||= StandardFormatter.new
       appender.levels = @@config.levels if appender.levels.empty?
     end
+  end
+
+  # Public: Callback method for when Hatchet is registered as a Sinatra helper.
+  #
+  # Example
+  #
+  #   register Hatchet
+  #
+  # Returns nothing.
+  def self.registered(app)
+    app.helpers Hatchet
   end
 
   # Internal: Returns the Array of configured appenders.
