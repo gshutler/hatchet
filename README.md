@@ -30,7 +30,7 @@ Hatchet.configure do |config|
 
   # Add as many appenders as you like, Hatchet comes with one that formats the
   # standard logger in the TTCC style of log4j.
-  config.appenders << Hatchet::LoggerAppender.new do |appender|
+  config.appenders << LoggerAppender.new do |appender|
     # Set the logger that this is wrapping (required)
     appender.logger = Logger.new('log/test.log')
   end
