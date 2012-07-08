@@ -11,9 +11,20 @@ module Hatchet
     #
     LEVELS = [:debug, :info, :warn, :error, :fatal, :off]
 
-    # Public: The Hash containing the log level configuration.
+    # Public: Returns the Hash containing the log level configuration.
     #
-    attr_accessor :levels
+    def levels
+      @levels ||= {}
+    end
+
+    # Public: Sets the Hash containing the log level configuration.
+    #
+    # levels - The Hash to use as the log level configuration.
+    #
+    # Returns nothing.
+    def levels=(levels)
+      @levels = levels
+    end
 
     # Public: Set the lowest level of message to log for the given context.
     #
