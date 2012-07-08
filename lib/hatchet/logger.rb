@@ -59,7 +59,7 @@ module Hatchet
       # current context, otherwise returns false.
       #
       define_method "#{level}?" do
-        @appenders.any? { |appender| appender.enabled? @context }
+        @appenders.any? { |appender| appender.enabled? level, @context }
       end
 
     end
