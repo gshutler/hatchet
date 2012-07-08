@@ -15,7 +15,7 @@ module Hatchet
     # Returns the context and message separated by a hypen.
     #
     def format(level, context, message)
-      "#{timestamp} [#{thread_name}] #{level.to_s.upcase.ljust 5} #{message}"
+      "#{timestamp} [#{thread_name}] #{format_level level} #{context} - #{message}"
     end
 
     private
@@ -35,6 +35,12 @@ module Hatchet
       else
         "#{Process.pid}##{Thread.current.object_id}"
       end
+    end
+
+    # Private: Returns the level formatted for log output as a String.
+    #
+    def format_level(level)
+      level.to_s.upcase.ljust(5)
     end
 
   end
