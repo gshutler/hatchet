@@ -5,14 +5,13 @@ module Hatchet
   # Internal: Class that handles logging calls and distributes them to all its
   # appenders.
   #
-  # Each logger has 6 methods. Those are, in decreasing order of severity:
+  # Each logger has 5 methods. Those are, in decreasing order of severity:
   #
   #  * fatal
   #  * error
   #  * warn
   #  * info
   #  * debug
-  #  * trace
   #
   # All the methods have the same signature. You can either provide a message as
   # a direct string, or as a block to the method is lazily evaluated (this is
@@ -38,7 +37,7 @@ module Hatchet
       @appenders = appenders
     end
 
-    [:trace, :debug, :info, :warn, :error, :fatal].each do |level|
+    [:debug, :info, :warn, :error, :fatal].each do |level|
 
       # Public: Logs a message at the given level.
       #
@@ -76,7 +75,6 @@ module Hatchet
     #             * warn
     #             * info
     #             * debug
-    #             * trace
     #
     # message - The message that will be logged by an appender when it is
     #           configured to log at the given level or lower.
