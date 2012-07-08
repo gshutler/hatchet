@@ -2,7 +2,7 @@
 
 module Hatchet
 
-  # Internal: Class that handles logging calls and distributes them to all its
+  # Public: Class that handles logging calls and distributes them to all its
   # appenders.
   #
   # Each logger has 5 logging methods. Those are, in decreasing order of

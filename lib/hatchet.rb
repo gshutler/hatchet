@@ -20,9 +20,9 @@ require_relative 'hatchet/version'
 #
 module Hatchet
 
-  # Public: Returns a Logger for the object.
+  # Public: Returns a HatchetLogger for the object.
   #
-  # The returned logger has 5 methods. Those are, in decreasing order of
+  # The logger has 5 logging methods. Those are, in decreasing order of
   # severity:
   #
   #  * fatal
@@ -31,7 +31,7 @@ module Hatchet
   #  * info
   #  * debug
   #
-  # All the methods have the same signature. You can either provide a message as
+  # All these methods have the same signature. You can either provide a message as
   # a direct string, or as a block to the method is lazily evaluated (this is
   # the recommended option).
   #
@@ -40,18 +40,31 @@ module Hatchet
   #   logger.info "Informational message"
   #   logger.info { "Informational message #{potentially_expensive}" }
   #
-  # Log messages are sent to appender where they will be filtered and invoked as
-  # configured.
+  # Log messages are sent to each appender where they will be filtered and
+  # invoked as configured.
   #
-  # Returns a Logger for the object.
+  # The logger also has 5 inspection methods. Those are, in decreasing order of
+  # severity:
+  #
+  #  * fatal?
+  #  * error?
+  #  * warn?
+  #  * info?
+  #  * debug?
+  #
+  # All these methods take no arguments and return true if any of the loggers'
+  # appenders will log a message at that level for the current context,
+  # otherwise they will return false.
+  #
+  # Returns a HatchetLogger for the object.
   #
   def logger
     @_hatchet_logger ||= HatchetLogger.new self, Hatchet.appenders
   end
 
-  # Public: Returns a logger for the object.
+  # Public: Returns a HatchetLogger for the object.
   #
-  # The returned logger has 5 methods. Those are, in decreasing order of
+  # The logger has 5 logging methods. Those are, in decreasing order of
   # severity:
   #
   #  * fatal
@@ -60,7 +73,7 @@ module Hatchet
   #  * info
   #  * debug
   #
-  # All the methods have the same signature. You can either provide a message as
+  # All these methods have the same signature. You can either provide a message as
   # a direct string, or as a block to the method is lazily evaluated (this is
   # the recommended option).
   #
@@ -69,10 +82,23 @@ module Hatchet
   #   log.info "Informational message"
   #   log.info { "Informational message #{potentially_expensive}" }
   #
-  # Log messages are sent to appender where they will be filtered and invoked as
-  # configured.
+  # Log messages are sent to each appender where they will be filtered and
+  # invoked as configured.
   #
-  # Returns a Logger for the object.
+  # The logger also has 5 inspection methods. Those are, in decreasing order of
+  # severity:
+  #
+  #  * fatal?
+  #  * error?
+  #  * warn?
+  #  * info?
+  #  * debug?
+  #
+  # All these methods take no arguments and return true if any of the loggers'
+  # appenders will log a message at that level for the current context,
+  # otherwise they will return false.
+  #
+  # Returns a HatchetLogger for the object.
   #
   alias_method :log, :logger
 
