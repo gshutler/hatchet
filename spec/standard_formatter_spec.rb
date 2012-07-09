@@ -54,6 +54,20 @@ describe StandardFormatter do
       end
     end
 
+    describe 'benchmarks' do
+      it 'is reasonably quick' do
+        start = Time.now
+
+        50_000.times do
+          subject.format(:info, @context, @message)
+        end
+
+        took = Time.now - start
+        limit = 0.5
+        assert took < limit, "Expected messages to take less than #{limit} but too #{took}"
+      end
+    end
+
     def format_as_string(time)
       time.strftime TIME_FORMAT
     end

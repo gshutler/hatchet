@@ -6,6 +6,10 @@ module Hatchet
   #
   class StandardFormatter
 
+    def initialize
+      @secs = 0
+    end
+
     # Public: Returns the formatted message.
     #
     # level   - The severity of the log message.
@@ -23,7 +27,14 @@ module Hatchet
     # Private: Returns the current time as a String.
     #
     def timestamp
-      Time.now.strftime('%Y-%m-%d %H:%M:%S.%L')
+      time = Time.now
+
+      if (secs = time.to_i) > @secs
+        @secs = secs
+        @date = time.strftime('%Y-%m-%d %H:%M:%S.')
+      end
+
+      @date + (time.usec/1000).to_s.rjust(3,'0')
     end
 
     # Private: Returns the name of the current thread from the processes pid and
