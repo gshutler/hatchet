@@ -14,8 +14,8 @@ module Hatchet
   #  * info
   #  * debug
   #
-  # All these methods have the same signature. You can either provide a message as
-  # a direct string, or as a block to the method is lazily evaluated (this is
+  # All these methods have the same signature. You can either provide a message
+  # as a direct string, or as a block to the method is lazily evaluated (this is
   # the recommended option).
   #
   # Examples
