@@ -19,6 +19,7 @@ module Hatchet
     # Returns the context and message separated by a hypen.
     #
     def format(level, context, message)
+      message = message.to_s.strip
       "#{timestamp} [#{thread_name}] #{format_level level} #{context} - #{message}"
     end
 
