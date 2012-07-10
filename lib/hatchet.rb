@@ -132,8 +132,9 @@ module Hatchet
   def self.configure
     @@config = Configuration.new
     yield @@config
+    default_formatter = StandardFormatter.new
     @@config.appenders.each do |appender|
-      appender.formatter ||= StandardFormatter.new
+      appender.formatter ||= default_formatter
       appender.levels = @@config.levels if appender.levels.empty?
     end
   end

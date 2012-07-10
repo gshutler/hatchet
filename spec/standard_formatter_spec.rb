@@ -63,8 +63,8 @@ describe StandardFormatter do
         end
 
         took = Time.now - start
-        limit = 0.5
-        assert took < limit, "Expected messages to take less than #{limit} but too #{took}"
+        limit = 0.4
+        assert took < limit, "Expected messages to take less than #{limit} but took #{took}"
       end
     end
 

@@ -29,12 +29,18 @@ module Hatchet
     def timestamp
       time = Time.now
 
-      if (secs = time.to_i) > @secs
+      secs = time.to_i
+      millis = time.nsec/1000000
+
+      return @last if @millis == millis && @secs == secs
+
+      unless secs == @secs
         @secs = secs
         @date = time.strftime('%Y-%m-%d %H:%M:%S.')
       end
 
-      @date + (time.usec/1000).to_s.rjust(3,'0')
+      @millis = millis
+      @last = @date + "00#{millis}"[1..3]
     end
 
     # Private: Returns the name of the current thread from the processes pid and
