@@ -7,15 +7,21 @@ filters.
 
 Add this line to your application's Gemfile:
 
-    gem 'hatchet'
+```ruby
+gem 'hatchet'
+```
 
 And then execute:
 
-    $ bundle
+```
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install hatchet
+```
+$ gem install hatchet
+```
 
 ## Usage
 
