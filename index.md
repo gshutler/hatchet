@@ -5,23 +5,16 @@ title: Hatchet
 
 # Installation
 
-Add this line to your application's Gemfile:
+Hatchet has specific hooks for [Rails](/hatchet/install/rails.html) and
+[Sinatra](/hatchet/install/sinatra.html) though it is suitable for use in
+[any Ruby project](/hatchet/install/ruby.html). Please select the installation
+guide that most suits your scenario below:
 
-{% highlight ruby %}
-gem 'hatchet'
-{% endhighlight %}
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install hatchet
+ * [Install for Rails](/hatchet/install/rails.html)
+ * [Install for Sinatra](/hatchet/install/sinatra.html)
+ * [Standard Ruby install](/hatchet/install/ruby.html)
 
 # Usage
-
-## Logging
 
 To use the logger you must add it to your classes as a mixin or use it to extend
 your modules. Then you can call the logger through the methods `log` and
@@ -45,62 +38,13 @@ module Bar
 end
 {% endhighlight %}
 
-## Configuration
-
-### Standard
-
-{% highlight ruby %}
-Hatchet.configure do |config|
-  # Set the level to use unless overridden (defaults to :info)
-  config.level :info
-  # Set the level for a specific class/module and its children
-  # (can be a string)
-  config.level :debug, Namespace::Something::Nested
-
-  # Add as many appenders as you like, Hatchet comes with one that
-  # formats the standard logger in the TTCC style of log4j.
-  config.appenders << Hatchet::LoggerAppender.new do |appender|
-    # Set the logger that this is wrapping (required)
-    appender.logger = Logger.new('log/test.log')
-  end
-end
-{% endhighlight %}
-
-### Sinatra
-
-Use the standard configuration method but also register Hatchet as a helper
-where appropriate:
-
-{% highlight ruby %}
-register Hatchet
-{% endhighlight %}
-
-### Rails
-
-Hatchet includes a Railtie that is loaded automatically and wraps the
-`Rails.logger`. The Hatchet configuration object is available through
-`config.hatchet` within your standard configuration files for fine-tuning your
-Hatchet configuration.
-
-To make it so your log calls are scoped to your controllers you also need to add
-Hatchet to your `ApplicationController`:
-
-{% highlight ruby %}
-class ApplicationController < ActionController::Base
-  include Hatchet
-end
-{% endhighlight %}
-
-You could include it in your models so that each of those has its own logging
-context too.
-
 # Contributing
 
-1. Fork it
+1. [Fork it on GitHub](https://github.com/gshutler/hatchet)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+5. Create a new [Pull Request](https://github.com/gshutler/hatchet/pulls)
 
 All pull requests should come complete with tests when appropriate and should
 follow the existing style which is best described in
