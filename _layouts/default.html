@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Hatchet</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="/hatchet/stylesheets/styles.css">
+    <link rel="stylesheet" href="/hatchet/stylesheets/pygment_trac.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -14,23 +14,37 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>Hatchet</h1>
+        <h1><a href="/hatchet/">Hatchet</a></h1>
         <p>Ruby logging library that provides the ability to add class/module specific filters</p>
-        <ul>
-          <li><a href="http://gshutler.github.com/hatchet">How To <strong>Install</strong></a></li>
+        <ul class="buttons">
+          <li><a href="/hatchet/install.html">How To <strong>Install</strong></a></li>
           <li><a href="https://github.com/gshutler/hatchet">View On <strong>GitHub</strong></a></li>
           <li><a href="https://twitter.com/gshutler">Follow On <strong>Twitter</strong></a></li>
         </ul>
+
         <p class="view"><a href="https://github.com/gshutler/hatchet">View the
           Project on GitHub <strong>gshutler/hatchet</strong></a></p>
+        <br />
+        <h4>Navigation</h4>
+        <ul>
+          <li>
+            <a href="/hatchet/install.html">Installation</a>
+            <ul>
+              <li><a href="/hatchet/rails.html">Rails</a></li>
+              <li><a href="/hatchet/sinatra.html">Sinatra</a></li>
+              <li><a href="/hatchet/ruby.html">Ruby</a></li>
+            </ul>
+          </li>
+          <li><a href="/hatchet/configuration.html">Configuration</a></li>
+        </ul>
+        <br />
+        <br />
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </header>
       <section>
         {{ content }}
       </section>
-      <footer>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
+    <script src="/hatchet/javascripts/scale.fix.js"></script>
   </body>
 </html>
