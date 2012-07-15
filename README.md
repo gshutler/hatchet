@@ -74,23 +74,10 @@ register Hatchet
 
 #### Rails
 
-***This is not great at the moment but it kind of works. I'm working on it.***
-
-You can wrap the standard Rails logger using an initializer for your
-configuration. Name the file `_hatchet.rb` so that it is run before any other
-initializers that might reference the Rails logger.
-
-```ruby
-# config/initializers/_hatchet.rb
-
-Hatchet.configure do |config|
-  config.appenders << Hatchet::LoggerAppender.new(logger: Rails.logger)
-end
-
-YourApplication.extend Hatchet
-
-Rails.logger = YourApplication.logger
-```
+Hatchet includes a Railtie that is loaded automatically and wraps the
+`Rails.logger`. The Hatchet configuration object is available through
+`config.hatchet` within your standard configuration files for fine-tuning your
+Hatchet configuration.
 
 To make it so your log calls are scoped to your controllers you also need to add
 Hatchet to your `ApplicationController`:
@@ -111,3 +98,8 @@ context too.
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+All pull requests should come complete with tests when appropriate and should
+follow the existing style which is best described in
+[Github's Ruby style guide](https://github.com/styleguide/ruby/).
+

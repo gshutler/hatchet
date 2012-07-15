@@ -130,12 +130,11 @@ module Hatchet
   #
   # Returns nothing.
   def self.configure
-    @@config = Configuration.new
-    yield @@config
+    yield configuration
     default_formatter = StandardFormatter.new
-    @@config.appenders.each do |appender|
+    configuration.appenders.each do |appender|
       appender.formatter ||= default_formatter
-      appender.levels = @@config.levels if appender.levels.empty?
+      appender.levels = configuration.levels if appender.levels.empty?
     end
   end
 
@@ -153,12 +152,20 @@ module Hatchet
   # Internal: Returns the Array of configured appenders.
   #
   def self.appenders
-    if @@config and @@config.appenders
-      @@config.appenders
-    else
-      []
-    end
+    configuration.appenders
+  end
+
+  private
+
+  # Private: Returns the configuration object, initializing it when necessary.
+  #
+  def self.configuration
+    @config ||= Configuration.new
   end
 
 end
+
+# If we are running in a Rails environment include the Hatchet::Railtie class.
+#
+require_relative 'hatchet/railtie' if defined?(Rails)
 

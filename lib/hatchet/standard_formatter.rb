@@ -41,7 +41,7 @@ module Hatchet
       end
 
       @millis = millis
-      @last = @date + "00#{millis}"[1..3]
+      @last = @date + "00#{millis}"[-3..-1]
     end
 
     # Private: Returns the name of the current thread from the processes pid and

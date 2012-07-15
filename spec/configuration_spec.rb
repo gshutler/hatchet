@@ -3,6 +3,12 @@
 require_relative 'spec_helper'
 
 describe 'configuration' do
+  before do
+    Hatchet.configure do |config|
+      config.reset!
+    end
+  end
+
   describe 'appender defaults' do
     let(:set_levels) { { unique: :fake_level } }
     let(:appender)   { StoringAppender.new }
@@ -51,7 +57,7 @@ describe 'configuration' do
   end
 
   describe 'global default level' do
-    let(:appender)   { StoringAppender.new }
+    let(:appender) { StoringAppender.new }
 
     before do
       Hatchet.configure do |config|

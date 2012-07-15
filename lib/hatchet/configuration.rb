@@ -16,6 +16,12 @@ module Hatchet
     # Creates the levels Hash with a default logging level of info.
     #
     def initialize
+      reset!
+    end
+
+    # Public: Resets the configuration's internal state to the defaults.
+    #
+    def reset!
       @levels = { nil => :info }
       @appenders = []
     end
