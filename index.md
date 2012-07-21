@@ -48,4 +48,5 @@ end
 
 All pull requests should come complete with tests when appropriate and should
 follow the existing style which is best described in
-[Github's Ruby style guide](https://github.com/styleguide/ruby/).
+[Github's Ruby style guide](https://github.com/styleguide/ruby/). Bonus internet
+points are provided if you submit a pull request for the `gh-pages` branch too.

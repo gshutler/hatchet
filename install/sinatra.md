@@ -7,7 +7,8 @@ title: Hatchet - Sinatra Installation
 
 ## Bundler-Enabled Applications
 
-Add this line to your application's Gemfile:
+Add this line to your application's Gemfile to get Hatchet from
+[RubyGems.org](https://rubygems.org/gems/hatchet):
 
 {% highlight ruby %}
 gem 'hatchet'
@@ -29,7 +30,8 @@ require 'hatchet'
 
 ## Non-Bundler Applications
 
-First you must install the gem:
+First you must install the gem from
+[RubyGems.org](https://rubygems.org/gems/hatchet):
 
     $ gem install hatchet
 

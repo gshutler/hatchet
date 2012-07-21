@@ -8,7 +8,8 @@ title: Hatchet - Rails Installation
 Hatchet includes a Railtie that is loaded automatically and wraps the
 `Rails.logger`.
 
-Add this line to your application's Gemfile:
+Add this line to your application's Gemfile to get Hatchet from
+[RubyGems.org](https://rubygems.org/gems/hatchet):
 
 {% highlight ruby %}
 gem 'hatchet'
@@ -36,14 +37,15 @@ By default the Railtie will wrap the standard Rails logger. If you want to
 utilize some of the more advanced functionality of Hatchet it is recommended
 that you place your configuration into `config/initializers/hatchet.rb`.
 
-Before specifying your custom configuration you may want to reset Hatchet in
-order to remove the Rails logger from its configuration:
+Before specifying your [custom configuration](/hatchet/configuration.html) you
+may want to reset Hatchet in order to remove the Rails logger from its
+configuration:
 
 {% highlight ruby %}
 Hatchet.configure do |config|
   # Remove any existing configuration
   config.reset!
-  # Specify your custom configuration here
+  # Then specify your custom configuration
 end
 {% endhighlight %}
 
