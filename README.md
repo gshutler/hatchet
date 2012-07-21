@@ -3,6 +3,8 @@
 Ruby logging library that provides the ability to add class/module specific
 filters.
 
+This README provides a brief overview of Hatchet, [see the main site for more complete documentation and tutorials](http://gshutler.github.com/hatchet/).
+
 ## Installation
 
 Add this line to your application's Gemfile:
