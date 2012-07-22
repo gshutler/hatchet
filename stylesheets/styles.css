@@ -170,6 +170,10 @@ header ul ul {
   padding-left:1.4em;
 }
 
+header ul.navigation > li {
+  margin-bottom: 0.4em;
+}
+
 section {
   width:500px;
   float:right;
@@ -252,7 +256,7 @@ footer {
     padding:15px;
   }
 
-  header ul {
+  header ul.buttons {
     display:none;
   }
 }
