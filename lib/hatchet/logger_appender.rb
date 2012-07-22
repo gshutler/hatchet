@@ -54,13 +54,11 @@ module Hatchet
       end
     end
 
-    # Internal: Adds a message to the appender if the appender is configured to
-    # log messages at the given level for the given context.
+    # Internal: Adds a message to the logger.
     #
     # level   - The level of the message.
     # context - The context of the message.
-    # message - The message to add to the appender if it is configured to log
-    #           messages at the given level for the given context.
+    # message - The unformatted message.
     #
     # Returns nothing.
     #
