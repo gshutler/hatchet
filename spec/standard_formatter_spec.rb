@@ -3,20 +3,6 @@
 require_relative 'spec_helper'
 require 'date'
 
-describe SimpleFormatter do
-  let(:subject) { SimpleFormatter.new }
-
-  describe 'when formatting a message' do
-    before do
-      @message = subject.format(:info, 'Custom::Context', 'Hello, World')
-    end
-
-    it 'outputs the message in the LEVEL CONTEXT - MESSAGE format' do
-      assert 'INFO - Custom::Context - Hello, World' == @message, "got #{@message}"
-    end
-  end
-end
-
 describe StandardFormatter do
   TIME_FORMAT = '%Y-%m-%d %H:%M:%S.%L'
 
