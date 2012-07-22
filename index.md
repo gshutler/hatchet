@@ -3,6 +3,18 @@ layout: default
 title: Hatchet
 ---
 
+# What is Hatchet?
+
+Hatchet is a logging framework written from the ground up in Ruby. It has been
+inspired by the likes of [log4j](http://logging.apache.org/log4j/) and [slf4j](http://www.slf4j.org/)
+but is not a port of either of them.
+
+Hatchet aims to integrate seamlessly with your Ruby projects and provide a
+single logging interface that can pass on messages to any backend you want to
+use.
+
+[Read more about Hatchet](/hatchet/about.html)
+
 # Installation
 
 Hatchet has specific hooks for [Rails](/hatchet/install/rails.html) and
@@ -37,6 +49,28 @@ module Bar
   end
 end
 {% endhighlight %}
+
+The logger has all the core methods you are used to from the standard logger for
+logging messages taking either a `String` or a lazily-evaluated block:
+
+ * `debug`
+ * `info`
+ * `warn`
+ * `error`
+ * `fatal`
+
+It also has all the methods for checking whether logging is active at a given
+level:
+
+ * `debug?`
+ * `info?`
+ * `warn?`
+ * `error?`
+ * `fatal?`
+
+The level of logging can be controlled down to the class level and each message
+can be logged to several locations. See the
+[configuration guide for more details](http://gshutler.github.com/hatchet/configuration.html).
 
 # Contributing
 
