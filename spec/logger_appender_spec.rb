@@ -27,13 +27,6 @@ describe LoggerAppender do
     end
   end
 
-  describe 'sending a message for a disabled level' do
-    it 'does not pass the message on to the logger' do
-      subject.add :debug, 'Context', 'Hello, World'
-      assert_empty logger.messages
-    end
-  end
-
   describe 'sending a message of an enabled level' do
     let(:message) { logger.messages.last }
 
