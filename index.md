@@ -32,6 +32,8 @@ To use the logger you must add it to your classes as a mixin or use it to extend
 your modules. Then you can call the logger through the methods `log` and
 `logger`. They are aliases for the same method to ease migration.
 
+### Classes
+
 {% highlight ruby %}
 class Foo
   include Hatchet
@@ -40,7 +42,11 @@ class Foo
     log.info { 'Doing some work' }
   end
 end
+{% endhighlight %}
 
+### Modules
+
+{% highlight ruby %}
 module Bar
   extend Hatchet
 
@@ -49,6 +55,8 @@ module Bar
   end
 end
 {% endhighlight %}
+
+## Logging API
 
 The logger has all the core methods you are used to from the standard logger for
 logging messages taking either a `String` or a lazily-evaluated block:
