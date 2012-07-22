@@ -2,7 +2,7 @@
 
 module Hatchet
 
-  # Public: Standard formatter class.
+  # Public: Standard formatter class. Outputs messages in the TTCC of log4j.
   #
   class StandardFormatter
 
@@ -16,7 +16,9 @@ module Hatchet
     # context - The context of the log message.
     # message - The message provided by the log caller.
     #
-    # Returns the context and message separated by a hypen.
+    # Returns messages in the format:
+    #
+    #   %Y-%m-%d %H:%M:%S.%L [THREAD] LEVEL CONTEXT - MESSAGE
     #
     def format(level, context, message)
       message = message.to_s.strip

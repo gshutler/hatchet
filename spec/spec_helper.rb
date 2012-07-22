@@ -8,7 +8,7 @@ require_relative '../lib/hatchet'
 include Hatchet
 
 require_relative 'helpers/logger_double'
-require_relative 'helpers/simple_formatter'
+require_relative 'helpers/test_formatter'
 require_relative 'helpers/storing_appender'
 
 INITIAL_EXECUTION_CONTEXT = self

@@ -4,7 +4,7 @@ require_relative 'spec_helper'
 
 describe LoggerAppender do
   let(:logger)    { LoggerDouble.new }
-  let(:formatter) { SimpleFormatter.new }
+  let(:formatter) { TestFormatter.new }
   let(:subject) do
     LoggerAppender.new do |appender|
       appender.logger    = logger

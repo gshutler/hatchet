@@ -2,7 +2,7 @@
 
 require 'ostruct'
 
-class SimpleFormatter
+class TestFormatter
   def format(level, context, message)
     OpenStruct.new(level: level, context: context, message: message)
   end

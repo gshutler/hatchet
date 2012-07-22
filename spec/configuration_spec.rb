@@ -32,7 +32,7 @@ describe 'configuration' do
   describe 'appender overrides' do
     let(:default_levels)     { { unique: :fake_level } }
     let(:appender_levels)    { { appender: :faker_level } }
-    let(:appender_formatter) { SimpleFormatter.new }
+    let(:appender_formatter) { TestFormatter.new }
     let(:appender) do
       StoringAppender.new do |app|
         app.levels    = appender_levels

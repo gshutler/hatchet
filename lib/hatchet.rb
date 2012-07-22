@@ -5,6 +5,7 @@ require_relative 'hatchet/configuration'
 require_relative 'hatchet/hatchet_logger'
 require_relative 'hatchet/logger_appender'
 require_relative 'hatchet/message'
+require_relative 'hatchet/simple_formatter'
 require_relative 'hatchet/standard_formatter'
 require_relative 'hatchet/version'
 
