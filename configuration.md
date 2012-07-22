@@ -26,13 +26,18 @@ Hatchet comes with one appender out of the box, the `LoggerAppender`. This is an
 appender that delegates its log calls to an instance of the standard Ruby
 logger.
 
-Hatchet also comes with one formatter, the `StandardFormatter`. This is a
-formatter that outputs messages in the TTCC of log4j. This is a format that is
-easy to grep and works well with log monitoring tools like
-[Chainsaw](http://logging.apache.org/chainsaw/index.html).
+Hatchet also comes with two formatters, the `StandardFormatter` and the
+`SimpleFormatter`.
+
+The `StandardFormatter` is a formatter that outputs messages in the TTCC format
+of log4j. This is a format that is easy to grep and works well with log
+monitoring tools like [Chainsaw](http://logging.apache.org/chainsaw/index.html).
 
 > The [development version of Chainsaw](http://people.apache.org/~sdeboy/) plays
 > best with Hatchet's output.
+
+The `SimpleFormatter` is formats messages similarly to the `StandardFormatter`
+but only outputs the level, context, and text of the log message.
 
 ### Example Configuration
 

@@ -15,7 +15,15 @@ and a brief description of what it does. It will then be added to the list.
 
 ## Appenders
 
-There are currently no known appenders.
+### hatchet-hipchat
+
+[https://github.com/gshutler/hatchet-hipchat](https://github.com/gshutler/hatchet-hipchat)
+
+{% highlight ruby %}
+gem 'hatchet-hipchat'
+{% endhighlight %}
+
+An appender that posts messages to HipChat rooms.
 
 ## Formatters
 
