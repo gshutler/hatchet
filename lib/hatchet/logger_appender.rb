@@ -65,7 +65,6 @@ module Hatchet
     # Returns nothing.
     #
     def add(level, context, message)
-      return unless enabled? level, context
       @logger.send level, @formatter.format(level, context, message)
     end
 

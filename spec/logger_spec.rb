@@ -3,8 +3,9 @@
 require_relative 'spec_helper'
 
 describe HatchetLogger do
+  let(:disabled_appender) { DisabledAppender.new }
   let(:appender)  { StoringAppender.new :debug }
-  let(:appenders) { [appender] }
+  let(:appenders) { [appender, disabled_appender] }
   let(:context)   { Context::Class.new }
   let(:subject)   { HatchetLogger.new context, appenders }
 
@@ -28,6 +29,12 @@ describe HatchetLogger do
         assert level == received.level
         assert context.class == received.context
         assert message == received.message.to_s
+      end
+
+      it 'should not call the disabled appender' do
+        subject.send level, message
+
+        refute disabled_appender.add_called
       end
     end
   end

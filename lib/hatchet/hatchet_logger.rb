@@ -96,7 +96,11 @@ module Hatchet
     # Returns nothing.
     #
     def add(level, message)
-      @appenders.each { |appender| appender.add(level, @context, message) }
+      @appenders.each do |appender|
+        if appender.enabled?(level, @context)
+          appender.add(level, @context, message)
+        end
+      end
     end
 
     # Private: Determines the contextual name of the host object.
