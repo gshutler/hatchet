@@ -71,8 +71,17 @@ module Hatchet
       # Public: Returns true if any of the appenders will log messages for the
       # current context, otherwise returns false.
       #
+      # Writes messages to STDOUT if any appender fails to complete the check.
+      #
       define_method "#{level}?" do
-        @appenders.any? { |appender| appender.enabled? level, @context }
+        @appenders.any? do |appender|
+          begin
+            appender.enabled? level, @context
+          rescue => e
+            puts "Failed to check if level #{level} enabled for #{context} with appender #{appender}\n"
+            false
+          end
+        end
       end
 
     end
@@ -93,12 +102,20 @@ module Hatchet
     # message - The message that will be logged by an appender when it is
     #           configured to log at the given level or lower.
     #
+    # Writes messages to STDOUT if any appender fails to complete the enabled
+    # check or log the message.
+    #
     # Returns nothing.
     #
     def add(level, message)
       @appenders.each do |appender|
         if appender.enabled?(level, @context)
-          appender.add(level, @context, message)
+          begin
+            appender.add(level, @context, message)
+          rescue => e
+            puts "Failed to log message for #{context} with appender #{appender} - #{level} - #{message}\n"
+            puts "#{e}\n"
+          end
         end
       end
     end
