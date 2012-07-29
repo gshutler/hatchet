@@ -15,6 +15,11 @@ and a brief description of what it does. It will then be added to the list.
 
 ## Appenders
 
+### Core
+
+Hatchet comes with the [`LoggerAppender`](https://github.com/gshutler/hatchet/blob/master/lib/hatchet/logger_appender.rb)
+appender that delegates to a [standard `Logger`](http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html)
+
 ### hatchet-hipchat
 
 [https://github.com/gshutler/hatchet-hipchat](https://github.com/gshutler/hatchet-hipchat)
@@ -27,5 +32,27 @@ An appender that posts messages to HipChat rooms.
 
 ## Formatters
 
-There are currently no known formatters.
+### Core
+
+Hatchet comes two formatters, `StandardFormatter` and `SimpleFormatter`.
+
+#### StandardFormatter
+
+The `StandardFormatter` outputs messages in the TTCC of log4j. This is a format
+that is easy to grep and works well with log monitoring tools like [Chainsaw](http://logging.apache.org/chainsaw/index.html).
+
+```
+%Y-%m-%d %H:%M:%S.%L [THREAD] LEVEL CONTEXT - MESSAGE
+```
+
+#### SimpleFormatter
+
+The `SimpleFormatter` outputs messages in a simpler format for when the time an
+thread of the message is provided by some other means. For example, Heroku adds
+the timestamp and thread to log messages of its own accord so it does not need
+to be duplicated.
+
+```
+LEVEL - CONTEXT - MESSAGE
+```
 

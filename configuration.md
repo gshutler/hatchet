@@ -153,7 +153,10 @@ Hatchet.configure do |config|
 end
 {% endhighlight %}
 
-Implementing `CustomEmailAppender` is left as an exercise to the reader.
+Related:
+
+ * [Creating an appender](/hatchet/extending/appenders.html)
+ * [Known appenders](/hatchet/extensions.html#appenders)
 
 ## Formatters
 
@@ -168,8 +171,8 @@ Formatters are specific to each appender. If no formatter is assigned to the
 The `StandardFormatter` outputs messages in the TTCC of log4j. This is a format
 that is easy to grep and works well with log monitoring tools like [Chainsaw](http://logging.apache.org/chainsaw/index.html).
 
-If you don't like that type of output you just have to set the formatter of your
-appender to a formatter you do like the style of:
+If you don't like that type of output you can set the formatter of your appender
+to a formatter you do like the style of:
 
 {% highlight ruby %}
 Hatchet.configure do |config|
@@ -178,4 +181,20 @@ Hatchet.configure do |config|
   end
 end
 {% endhighlight %}
+
+You can also change the default formatter used by all appenders:
+
+{% highlight ruby %}
+Hatchet.configure do |config|
+  config.formatter = CustomFormatter.new
+end
+{% endhighlight %}
+
+Changing the default formatter will change the formatter for all future
+appenders and all those already using the default appender.
+
+Related:
+
+ * [Creating a formatter](/hatchet/extending/formatters.html)
+ * [Known formatters](/hatchet/extensions.html#formatters)
 
