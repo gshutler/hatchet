@@ -13,9 +13,7 @@ module Hatchet
     # Expose Hatchet's configuration object to consumers through the Rails
     # config object.
     #
-    Hatchet.configure do |config|
-      self.config.hatchet = config
-    end
+    self.config.hatchet = Hatchet.configuration
 
     # Wrap the default Rails.logger, Rails.application.assets.logger, and all
     # log subscribers found in ActiveSupport::LogSubscriber.log_subscribers
@@ -27,10 +25,23 @@ module Hatchet
       #
       logger = Rails.logger
 
+      # Map the level of the logger so Hatchet uses the same.
+      #
+      current_level =
+        case logger.level
+        when Logger::DEBUG then :debug
+        when Logger::INFO  then :info
+        when Logger::WARN  then :warn
+        when Logger::ERROR then :error
+        when Logger::FATAL then :fatal
+        else nil # If not recognized use Hatchet's default
+        end
+
       # Add an appender that delegates to the current Rails.logger to Hatchet's
       # configuration.
       #
       Hatchet.configure do |config|
+        config.level(current_level) if current_level
         config.appenders << Hatchet::LoggerAppender.new(logger: logger)
       end
 
@@ -41,14 +52,15 @@ module Hatchet
       begin
         # Replace the Rails.logger with the application's Hatchet logger.
         #
-        logger.debug 'Replacing Rails logger with Hatchet'
         Rails.logger = app.logger
+        app.logger.debug { 'Replaced Rails logger with Hatchet' }
 
         # Replace the logger of every subscriber in the
         # ActiveSupport::LogSubscriber.log_subscribers collection by extending
+        # them with Hatchet.
         #
         ActiveSupport::LogSubscriber.log_subscribers.each do |subscriber|
-          logger.debug "Replacing #{subscriber.class} logger with Hatchet"
+          app.logger.debug { "Replacing #{subscriber.class} logger with Hatchet" }
           subscriber.extend Hatchet
         end
 
@@ -59,7 +71,7 @@ module Hatchet
         # As you can guess by the description this is probably the riskiest so
         # we do it last.
         #
-        logger.debug 'Replacing Rails asset logger with Hatchet'
+        app.logger.debug { 'Replacing Rails asset logger with Hatchet' }
 
         # Initially replace it with the application logger as it's better for
         # this to be done if the next part fails.
@@ -78,8 +90,8 @@ module Hatchet
         # If anything goes wrong along the way log it and let the application
         # continue.
         #
-        logger.error 'Failed to replace logger with Hatchet'
-        logger.error $!
+        logger.error { 'Failed to replace logger with Hatchet' }
+        logger.error { $! }
       end
     end
   end

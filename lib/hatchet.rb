@@ -117,12 +117,10 @@ module Hatchet
   #   Hatchet.configure do |config|
   #     # Set the level to use unless overridden (defaults to :info)
   #     config.level :info
-  #     # Set the level for a specific class/module and its children (can be a
-  #     # string)
-  #     config.level :debug, Namespace::Something::Nested
+  #     # Set the level for a specific class/module and its children
+  #     config.level :debug, 'Namespace::Something::Nested'
   #
-  #     # Add as many appenders as you like, Hatchet comes with one that formats
-  #     # the standard logger in the TTCC style of log4j.
+  #     # Add as many appenders as you like
   #     config.appenders << Hatchet::LoggerAppender.new do |appender|
   #       # Set the logger that this is wrapping (required)
   #       appender.logger = Logger.new('log/test.log')
@@ -130,13 +128,9 @@ module Hatchet
   #   end
   #
   # Returns nothing.
-  def self.configure
-    yield configuration
-    default_formatter = StandardFormatter.new
-    configuration.appenders.each do |appender|
-      appender.formatter ||= default_formatter
-      appender.levels = configuration.levels if appender.levels.empty?
-    end
+  #
+  def self.configure(&block)
+    configuration.configure(&block)
   end
 
   # Public: Callback method for when Hatchet is registered as a Sinatra helper.
@@ -146,6 +140,7 @@ module Hatchet
   #   register Hatchet
   #
   # Returns nothing.
+  #
   def self.registered(app)
     app.helpers Hatchet
   end
@@ -156,9 +151,7 @@ module Hatchet
     configuration.appenders
   end
 
-  private
-
-  # Private: Returns the configuration object, initializing it when necessary.
+  # Internal: Returns the configuration object, initializing it when necessary.
   #
   def self.configuration
     @config ||= Configuration.new

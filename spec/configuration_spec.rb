@@ -27,6 +27,22 @@ describe 'configuration' do
     it 'formatter set as a StandardFormatter' do
       assert appender.formatter.instance_of? StandardFormatter
     end
+
+    describe 'with an explicit default formatter' do
+      let(:formatter) { SimpleFormatter.new }
+      let(:second_appender)   { StoringAppender.new }
+
+      before do
+        Hatchet.configure do |config|
+          config.formatter = formatter
+          config.appenders << second_appender
+        end
+      end
+
+      it 'formatter set as the configured default' do
+        assert second_appender.formatter == formatter
+      end
+    end
   end
 
   describe 'appender overrides' do
