@@ -35,6 +35,8 @@ To use the logger you must add it to your classes as a mixin or use it to extend
 your modules. Then you can call the logger through the methods `log` and
 `logger`. They are aliases for the same method to ease migration.
 
+#### Classes
+
 ```ruby
 class Foo
   include Hatchet
@@ -44,6 +46,8 @@ class Foo
   end
 end
 ```
+
+#### Modules
 
 ```ruby
 module Bar
