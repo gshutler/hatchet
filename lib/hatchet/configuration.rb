@@ -11,14 +11,6 @@ module Hatchet
     #
     attr_reader :appenders
 
-    # Public: The default formatter to give to appenders that have not had their
-    # own explicitly set.
-    #
-    # If not set before adding an appender, will be initialized with a
-    # StandardFormatter.
-    #
-    attr_accessor :formatter
-
     # Internal: Creates a new configuration.
     #
     # Creates the levels Hash with a default logging level of info.
@@ -27,12 +19,36 @@ module Hatchet
       reset!
     end
 
+    # Public: Returns the default formatter given to the appenders that have not
+    # had their formatter explicitly set.
+    #
+    # If not otherwise set, will be a StandardFormatter.
+    #
+    def formatter
+      @formatter.formatter
+    end
+
+    # Public: Sets the default formatter given to the appenders that have not
+    # had their formatter explicitly set.
+    #
+    def formatter=(formatter)
+      @formatter.formatter = formatter
+    end
+
     # Public: Resets the configuration's internal state to the defaults.
     #
     def reset!
       @levels = { nil => :info }
-      @formatter = nil
       @appenders = []
+
+      # If a DelegatingFormatter has already been set up replace its
+      # formatter, otherwise create a new one.
+      #
+      if @formatter
+        @formatter.formatter = StandardFormatter.new
+      else
+        @formatter = DelegatingFormatter.new(StandardFormatter.new)
+      end
     end
 
     # Public: Yields the configuration object to the given block to make it
@@ -65,10 +81,6 @@ module Hatchet
     #
     def configure
       yield self
-
-      # Ensure a default formatter set.
-      #
-      @formatter ||= StandardFormatter.new
 
       # Ensure every appender has a formatter and a level configuration.
       #

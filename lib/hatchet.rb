@@ -2,6 +2,7 @@
 
 require_relative 'hatchet/level_manager'
 require_relative 'hatchet/configuration'
+require_relative 'hatchet/delegating_formatter'
 require_relative 'hatchet/hatchet_logger'
 require_relative 'hatchet/logger_appender'
 require_relative 'hatchet/message'

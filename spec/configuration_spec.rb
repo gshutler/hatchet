@@ -25,7 +25,8 @@ describe 'configuration' do
     end
 
     it 'formatter set as a StandardFormatter' do
-      assert appender.formatter.instance_of? StandardFormatter
+      assert appender.formatter.instance_of? DelegatingFormatter
+      assert appender.formatter.formatter.instance_of? StandardFormatter
     end
 
     describe 'with an explicit default formatter' do
@@ -39,8 +40,14 @@ describe 'configuration' do
         end
       end
 
-      it 'formatter set as the configured default' do
-        assert second_appender.formatter == formatter
+      it 'original formatter set as the configured default' do
+        assert appender.formatter.instance_of? DelegatingFormatter
+        assert appender.formatter.formatter == formatter
+      end
+
+      it 'second formatter set as the configured default' do
+        assert appender.formatter.instance_of? DelegatingFormatter
+        assert second_appender.formatter.formatter == formatter
       end
     end
   end

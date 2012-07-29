@@ -6,6 +6,8 @@ module Hatchet
   #
   class StandardFormatter
 
+    # Public: Creates a new instance.
+    #
     def initialize
       @secs = 0
     end
