@@ -4,6 +4,6 @@ module Hatchet
 
   # Public: The version of Hatchet.
   #
-  VERSION = '0.0.10'
+  VERSION = '0.0.11'
 
 end

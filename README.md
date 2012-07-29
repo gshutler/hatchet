@@ -43,7 +43,9 @@ class Foo
     log.info { 'Doing some work' }
   end
 end
+```
 
+```ruby
 module Bar
   extend Hatchet
 
@@ -61,11 +63,10 @@ end
 Hatchet.configure do |config|
   # Set the level to use unless overridden (defaults to :info)
   config.level :info
-  # Set the level for a specific class/module and its children (can be a string)
-  config.level :debug, Namespace::Something::Nested
+  # Set the level for a specific class/module and its children
+  config.level :debug, 'Namespace::Something::Nested'
 
-  # Add as many appenders as you like, Hatchet comes with one that formats the
-  # standard logger in the TTCC style of log4j.
+  # Add as many appenders as you like
   config.appenders << Hatchet::LoggerAppender.new do |appender|
     # Set the logger that this is wrapping (required)
     appender.logger = Logger.new('log/test.log')
