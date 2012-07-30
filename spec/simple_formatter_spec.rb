@@ -10,7 +10,7 @@ describe SimpleFormatter do
       @message = subject.format(:info, 'Custom::Context', 'Hello, World')
     end
 
-    it 'outputs the message in the LEVEL CONTEXT - MESSAGE format' do
+    it 'outputs the message in the LEVEL - CONTEXT - MESSAGE format' do
       assert 'INFO - Custom::Context - Hello, World' == @message, "got #{@message}"
     end
   end
