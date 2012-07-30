@@ -34,9 +34,20 @@ An appender that posts messages to HipChat rooms.
 
 ### Core
 
-Hatchet comes two formatters, `StandardFormatter` and `SimpleFormatter`.
+Hatchet comes three formatters, `PlainFormatter`, `StandardFormatter` and
+`SimpleFormatter`.
 
-#### StandardFormatter
+#### PlainFormatter
+
+```
+MESSAGE
+```
+
+The `PlainFormatter` outputs messages as they are provided without any
+additional context or sanitization. This is most useful with Rails' logs as they
+are intended to be human readable, particularly when in development.
+
+#### StandardFormatter (default)
 
 ```
 %Y-%m-%d %H:%M:%S.%L [THREAD] LEVEL CONTEXT - MESSAGE
