@@ -91,6 +91,19 @@ describe 'configuration' do
     it 'set to info' do
       assert appender.levels[nil] == :info
     end
+
+    describe "when changed the appender's reflect that change" do
+      before do
+        assert appender.enabled?(:info, 'Foo')
+        Hatchet.configure do |config|
+          config.level = :fatal
+        end
+      end
+
+      it 'should no longer have info enabled' do
+        refute appender.enabled?(:info, 'Foo')
+      end
+    end
   end
 
   describe 'everything wires up' do

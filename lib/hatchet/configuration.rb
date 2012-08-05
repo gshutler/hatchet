@@ -90,6 +90,16 @@ module Hatchet
       end
     end
 
+    # Internal: Removes the caching Hash of every appender so that they will all
+    # be re-initialized.
+    #
+    # Used when a change to logging levels is made so that the caches will not
+    # contain stale values.
+    #
+    def clear_levels_cache!
+      appenders.each(&:clear_levels_cache!)
+    end
+
   end
 
 end

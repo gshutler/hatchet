@@ -7,7 +7,7 @@ module Hatchet
   #
   module LevelManager
 
-    # Private: All the possible levels of log filter in order of severity.
+    # Internal: All the possible levels of log filter in order of severity.
     #
     LEVELS = [:debug, :info, :warn, :error, :fatal, :off]
 
@@ -24,6 +24,7 @@ module Hatchet
     # Returns nothing.
     def levels=(levels)
       @levels = levels
+      clear_levels_cache!
     end
 
     # Public: Set the lowest level of message to log for the given context.
@@ -31,13 +32,23 @@ module Hatchet
     # level   - The lowest level of message to log for the given context.
     # context - The context that level applies to (default: nil).
     #
-    # Setting a level for nil set the default level for all contexts that have
+    # Setting a level for nil sets the default level for all contexts that have
     # not been specified.
     #
     # Returns nothing.
     def level(level, context = nil)
       context = context.to_s unless context.nil?
       self.levels[context] = level
+      clear_levels_cache!
+    end
+
+    # Public: Set the lowest level of message to log by default.
+    #
+    # level - The lowest level of message to log by default.
+    #
+    # Returns nothing.
+    def level=(level)
+      self.level(level)
     end
 
     # Internal: Returns true if the appender is configured to log messages of
@@ -50,17 +61,34 @@ module Hatchet
     # level within the given context, otherwise returns false.
     #
     def enabled?(level, context)
-      unless self.levels.key? context
-        lvl = self.levels[nil]
+      unless self.levels_cache.key? context
+        lvl = self.levels_cache[nil]
         root = []
         context.to_s.split('::').each do |part|
           root << part
           path = root.join '::'
-          lvl = self.levels[path] if self.levels.key? path
+          lvl = self.levels_cache[path] if self.levels_cache.key? path
         end
-        self.levels[context] = lvl
+        self.levels_cache[context] = lvl
       end
-      LEVELS.index(level) >= LEVELS.index(self.levels[context])
+      LEVELS.index(level) >= LEVELS.index(self.levels_cache[context])
+    end
+
+    # Internal: Returns a lazily duplicated Hash from the levels Hash which is
+    # used to store the calculated logging level for specific contexts to make
+    # subsequent lookups more efficient.
+    #
+    def levels_cache
+      @_levels_cache ||= self.levels.dup
+    end
+
+    # Internal: Removes the caching Hash so that it will be re-initialized.
+    #
+    # Used when a change to logging levels is made so that the cache will not
+    # contain stale values.
+    #
+    def clear_levels_cache!
+      @_levels_cache = nil
     end
 
   end
