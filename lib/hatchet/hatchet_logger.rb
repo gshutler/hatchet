@@ -41,6 +41,16 @@ module Hatchet
   #
   class HatchetLogger
 
+    # Internal: Map from standard library levels to Symbols.
+    #
+    STANDARD_TO_SYMBOL = {
+      Logger::DEBUG => :debug,
+      Logger::INFO  => :info,
+      Logger::WARN  => :warn,
+      Logger::ERROR => :error,
+      Logger::FATAL => :fatal
+    }
+
     # Internal: Creates a new logger.
     #
     # host          - The object the logger gains its context from.
@@ -87,6 +97,12 @@ module Hatchet
 
     end
 
+    # Public: Returns the default level of the logger's configuration.
+    #
+    def level
+      @configuration.default_level
+    end
+
     # Public: Set the lowest level of message to log by default.
     #
     # level - The lowest level of message to log by default.
@@ -97,7 +113,14 @@ module Hatchet
     # Returns nothing.
     #
     def level=(level)
-      @configuration.level = level
+      level = case level
+              when Symbol
+                level
+              else
+                STANDARD_TO_SYMBOL[level] || :info
+              end
+
+      @configuration.level level
     end
 
     private

@@ -96,7 +96,7 @@ describe 'configuration' do
       before do
         assert appender.enabled?(:info, 'Foo')
         Hatchet.configure do |config|
-          config.level = :fatal
+          config.level :fatal
         end
       end
 

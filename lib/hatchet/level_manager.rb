@@ -44,14 +44,10 @@ module Hatchet
       clear_levels_cache!
     end
 
-    # Public: Set the lowest level of message to log by default.
+    # Internal: Returns the default level of the configuration.
     #
-    # level - The lowest level of message to log by default.
-    #
-    # Returns nothing.
-    #
-    def level=(level)
-      self.level(level)
+    def default_level
+      self.levels[nil]
     end
 
     # Internal: Returns true if the appender is configured to log messages of

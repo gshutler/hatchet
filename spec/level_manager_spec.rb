@@ -64,7 +64,7 @@ describe LevelManager do
     describe 'altering the default level' do
       it 'alters the enabled level for subsequent calls' do
         assert @manager.enabled?(:info, 'Foo::Bar')
-        @manager.level = :fatal
+        @manager.level :fatal
         refute @manager.enabled?(:info, 'Foo::Bar')
       end
     end

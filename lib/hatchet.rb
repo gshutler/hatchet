@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 
+require 'logger'
+
 require_relative 'hatchet/level_manager'
 require_relative 'hatchet/configuration'
 require_relative 'hatchet/delegating_formatter'
