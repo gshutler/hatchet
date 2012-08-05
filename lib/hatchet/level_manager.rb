@@ -22,6 +22,7 @@ module Hatchet
     # levels - The Hash to use as the log level configuration.
     #
     # Returns nothing.
+    #
     def levels=(levels)
       @levels = levels
       clear_levels_cache!
@@ -36,6 +37,7 @@ module Hatchet
     # not been specified.
     #
     # Returns nothing.
+    #
     def level(level, context = nil)
       context = context.to_s unless context.nil?
       self.levels[context] = level
@@ -47,6 +49,7 @@ module Hatchet
     # level - The lowest level of message to log by default.
     #
     # Returns nothing.
+    #
     def level=(level)
       self.level(level)
     end

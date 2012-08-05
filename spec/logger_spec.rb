@@ -4,10 +4,14 @@ require_relative 'spec_helper'
 
 describe HatchetLogger do
   let(:disabled_appender) { DisabledAppender.new }
-  let(:appender)  { StoringAppender.new :debug }
-  let(:appenders) { [appender, disabled_appender] }
-  let(:context)   { Context::Class.new }
-  let(:subject)   { HatchetLogger.new context, appenders }
+  let(:appender)      { StoringAppender.new :debug }
+  let(:appenders)     { [appender, disabled_appender] }
+  let(:configuration) { Configuration.new }
+  let(:context)       { Context::Class.new }
+  let(:subject) do
+    configuration.appenders.push(*appenders)
+    HatchetLogger.new context, configuration
+  end
 
   ALL_LEVELS.each do |level|
     describe "receiving #{level} messages" do

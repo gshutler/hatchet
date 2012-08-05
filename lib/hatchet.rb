@@ -62,7 +62,7 @@ module Hatchet
   # Returns a HatchetLogger for the object.
   #
   def logger
-    @_hatchet_logger ||= HatchetLogger.new self, Hatchet.appenders
+    @_hatchet_logger ||= HatchetLogger.new self, Hatchet.configuration
   end
 
   # Public: Returns a HatchetLogger for the object.

@@ -43,12 +43,13 @@ module Hatchet
 
     # Internal: Creates a new logger.
     #
-    # host      - The object the logger gains its context from.
-    # appenders - The appenders the logger delegates its messages to.
+    # host          - The object the logger gains its context from.
+    # configuration - The configuration of Hatchet.
     #
-    def initialize(host, appenders)
+    def initialize(host, configuration)
       @context = context host
-      @appenders = appenders
+      @configuration = configuration
+      @appenders = configuration.appenders
     end
 
     [:debug, :info, :warn, :error, :fatal].each do |level|
@@ -84,6 +85,19 @@ module Hatchet
         end
       end
 
+    end
+
+    # Public: Set the lowest level of message to log by default.
+    #
+    # level - The lowest level of message to log by default.
+    #
+    # The use of this method is not recommended as it affects the performance of
+    # the logging. It is only provided for compatibility.
+    #
+    # Returns nothing.
+    #
+    def level=(level)
+      @configuration.level = level
     end
 
     private
