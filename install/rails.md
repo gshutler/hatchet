@@ -97,13 +97,13 @@ This stops the Heroku application packaging process from adding the
 Add the following configuration to your `config/environments/production.rb`:
 
 {% highlight ruby %}
-config.hatchet.configure do |config|
+config.hatchet.configure do |hatchet|
   # Reset the logging configuration
-  config.reset!
+  hatchet.reset!
   # Use the format without time, etc so we don't duplicate it
-  config.formatter = Hatchet::SimpleFormatter.new
+  hatchet.formatter = Hatchet::SimpleFormatter.new
   # Set up a STDOUT appender
-  config.appenders << Hatchet::LoggerAppender.new do |appender|
+  hatchet.appenders << Hatchet::LoggerAppender.new do |appender|
     appender.logger = Logger.new(STDOUT)
   end
 end
