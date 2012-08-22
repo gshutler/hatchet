@@ -161,6 +161,16 @@ module Hatchet
     @config ||= Configuration.new
   end
 
+  # Internal: Hook that extends the class with Hatchet when it is included.
+  #
+  # klass - The klass that Hatchet was included into.
+  #
+  # Returns nothing.
+  #
+  def self.included(klass)
+    klass.extend Hatchet
+  end
+
 end
 
 # If we are running in a Rails environment include the Hatchet::Railtie class.

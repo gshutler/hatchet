@@ -168,7 +168,7 @@ module Hatchet
     def context(host)
       if host.inspect == 'main'
         'main'
-      elsif host.class == Module
+      elsif [Module, Class].include? host.class
         host
       else
         host.class
