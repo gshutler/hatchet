@@ -38,6 +38,10 @@ your modules. Then you can call the logger through the methods `log` and
 class Foo
   include Hatchet
 
+  def self.class_work
+    log.info { 'Doing some class work' }
+  end
+
   def work
     log.info { 'Doing some work' }
   end
