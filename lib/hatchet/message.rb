@@ -2,16 +2,24 @@
 
 module Hatchet
 
-  # Internal: Class for wrapping message strings and blocks in a way that means
+  # Public: Class for wrapping message strings and blocks in a way that means
   # they can be treated identically.
+  #
+  # If an error is associated with the message this will be available via the
+  # #error attribute.
   #
   # Blocks will be lazily evaluated once for all appenders when required.
   #
   class Message
 
+    # Public: Gets the error associated with this message, if given.
+    #
+    attr_reader :error
+
     # Internal: Creates a new message.
     #
     # message - An already evaluated message, usually a String (default: nil).
+    # error   - An error that is associated with the message (default: nil).
     # block   - An optional block which will provide a message when invoked.
     #
     # One of message or block must be provided. If both are provided then the
@@ -22,8 +30,9 @@ module Hatchet
     #   Message.new "Evaluated message"
     #   Message.new { "Lazily evaluated message" }
     #
-    def initialize(message = nil, &block)
+    def initialize(message = nil, error = nil, &block)
       @block = block
+      @error = error
       @message = message unless @block
     end
 

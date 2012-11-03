@@ -40,6 +40,17 @@ describe HatchetLogger do
 
         refute disabled_appender.add_called
       end
+
+      describe 'with an error' do
+        let(:error) { StandardError.new }
+
+        it 'should pass the error through to the appender' do
+          subject.send level, message, error
+          received = appender.messages.last
+
+          assert error == received.message.error
+        end
+      end
     end
   end
 
