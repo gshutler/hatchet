@@ -12,11 +12,17 @@ describe 'configuration' do
   describe 'appender defaults' do
     let(:set_levels) { { unique: :fake_level } }
     let(:appender)   { StoringAppender.new }
+    let(:unformatted_appender) do
+      obj = Object.new
+      obj.extend Hatchet::LevelManager
+      obj
+    end
 
     before do
       Hatchet.configure do |config|
         config.levels = set_levels
         config.appenders << appender
+        config.appenders << unformatted_appender
       end
     end
 

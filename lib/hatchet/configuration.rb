@@ -58,9 +58,9 @@ module Hatchet
     #         used to setup Hatchet.
     #
     # Once the block returns each of the configured appenders has its formatter
-    # set to the default formatter if one is not already set, and its levels
-    # Hash is set to the shared levels Hash if an explicit one has not been
-    # provided.
+    # set to the default formatter if they have one and one is not already set,
+    # and its levels Hash is set to the shared levels Hash if an explicit one
+    # has not been provided.
     #
     # Example
     #
@@ -85,8 +85,8 @@ module Hatchet
       # Ensure every appender has a formatter and a level configuration.
       #
       appenders.each do |appender|
-        appender.formatter ||= @formatter
-        appender.levels = @levels if appender.levels.empty?
+        appender.formatter ||= @formatter if appender.respond_to? 'formatter='
+        appender.levels = @levels         if appender.levels.empty?
       end
     end
 

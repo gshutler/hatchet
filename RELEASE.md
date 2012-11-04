@@ -1,5 +1,9 @@
 # Release notes
 
+## 0.0.18
+
+ * Made the presence of a `formatter=` method on appenders optional
+
 ## 0.0.17
 
  * Added the ability to pass an error along with your message
