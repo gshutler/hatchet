@@ -43,7 +43,17 @@ class Foo
   end
 
   def work
-    log.info { 'Doing some work' }
+    log.info { 'Doing some instance work' }
+  end
+
+  def dangerous_work
+    log.info { 'Attempting dangerous work' }
+    attempt_dangerous_work
+    log.info { 'Dangerous work complete' }
+    true
+  rescue => e
+    log.error "Dangerous work failed - #{e.message}", e
+    false
   end
 end
 {% endhighlight %}
@@ -74,6 +84,19 @@ logging messages taking either a `String` or a lazily-evaluated block:
  * `warn`
  * `error`
  * `fatal`
+
+It is recommended you use the block version as it avoids needless string
+interpolation when possible. However, if you are providing an error reads better
+to use the `String` version, passing the error as a second parameter:
+
+{% highlight ruby %}
+log.debug { "I won't be #{evaluated} unless debug messages are logged" }
+log.debug "Whereas I will always be #{evaluated}"
+
+log.error "Something bad happened - #{error.message}", error
+{% endhighlight %}
+
+An error can be passed to any level logging call.
 
 It also has all the methods for checking whether logging is active at a given
 level:
