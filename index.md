@@ -90,8 +90,8 @@ interpolation when possible. However, if you are providing an error reads better
 to use the `String` version, passing the error as a second parameter:
 
 {% highlight ruby %}
-log.debug { "I won't be #{evaluated} unless debug messages are logged" }
-log.debug "Whereas I will always be #{evaluated}"
+log.debug { "Not #{evaluated} unless debug messages enabled" }
+log.debug "Whereas this is always #{evaluated}"
 
 log.error "Something bad happened - #{error.message}", error
 {% endhighlight %}
