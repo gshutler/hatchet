@@ -20,9 +20,9 @@ class CustomAppender
     # Code determining whether messages will be logged for the
     # level and context.
     #
-    # For the majority of cases you do not need to implement this yourself.
-    # Instead you can include the Hatchet::LevelManager module into your class
-    # this will do the work required for you.
+    # For the majority of cases you do not need to implement this
+    # yourself. Instead you can include the Hatchet::LevelManager
+    # module into your class this will do the work required for you.
   end
 
   def add(level, context, message)
