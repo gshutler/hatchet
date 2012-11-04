@@ -69,3 +69,8 @@ Configuration is done via the
 done depends on how you have laid out your application but you should ensure
 that Hatchet is configured before you try and use it to log messages.
 
+# Caveats
+
+When logging messages you may need to use the `log` alias as Sinatra defines its
+own `logger` method.
+

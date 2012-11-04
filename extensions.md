@@ -20,6 +20,16 @@ and a brief description of what it does. It will then be added to the list.
 Hatchet comes with the [`LoggerAppender`](https://github.com/gshutler/hatchet/blob/master/lib/hatchet/logger_appender.rb)
 appender that delegates to a [standard `Logger`](http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html).
 
+### hatchet-airbrake
+
+[https://github.com/adambird/hatchet-airbrake](https://github.com/adambird/hatchet-airbrake)
+
+{% highlight ruby %}
+gem 'hatchet-airbrake'
+{% endhighlight %}
+
+An appender that sends errors to [Airbrake](https://airbrake.io/).
+
 ### hatchet-hipchat
 
 [https://github.com/gshutler/hatchet-hipchat](https://github.com/gshutler/hatchet-hipchat)

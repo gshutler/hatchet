@@ -56,7 +56,7 @@ module with Hatchet:
 
 {% highlight ruby %}
 class MyModule
-  extend Hatchet
+  include Hatchet
 end
 {% endhighlight %}
 

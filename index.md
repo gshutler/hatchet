@@ -52,10 +52,14 @@ end
 
 {% highlight ruby %}
 module Bar
-  extend Hatchet
+  include Hatchet
 
   def self.work
-    log.info { 'Doing some work' }
+    log.info { 'Doing some module work' }
+  end
+
+  def work
+    log.info { 'Doing some mixin work' }
   end
 end
 {% endhighlight %}
