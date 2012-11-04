@@ -55,10 +55,14 @@ end
 
 ```ruby
 module Bar
-  extend Hatchet
+  include Hatchet
 
   def self.work
-    log.info { 'Doing some work' }
+    log.info { 'Doing some module work' }
+  end
+
+  def work
+    log.info { 'Doing some mixin work' }
   end
 end
 ```
@@ -90,6 +94,9 @@ where appropriate:
 ```ruby
 register Hatchet
 ```
+
+Note that you may have to use the `log` alias as Sinatra already has a `logger`
+method.
 
 #### Rails
 

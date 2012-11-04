@@ -20,8 +20,17 @@ module Hatchet
   #
   # Examples
   #
-  #   logger.info "Informational message"
-  #   logger.info { "Informational message #{potentially_expensive}" }
+  #   log.info "Informational message"
+  #   log.info { "Informational message #{potentially_expensive}" }
+  #
+  # It is also possible to pass an error to associate with a message. It is down
+  # to the appender what it will do with the error (such as including the stack
+  # trace) so it is recommended you still include basic information within the
+  # message you pass.
+  #
+  # Examples
+  #
+  #   log.error "Something bad happened - #{error.message}", error
   #
   # Log messages are sent to each appender where they will be filtered and
   # invoked as configured.
