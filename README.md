@@ -48,6 +48,16 @@ class Foo
   def work
     log.info { 'Doing some work' }
   end
+
+  def dangerous_work
+    log.info { 'Attempting dangerous work' }
+    attempt_dangerous_work
+    log.info { 'Dangerous work complete' }
+    true
+  rescue => e
+    log.error "Dangerous work failed - #{e.message}", e
+    false
+  end
 end
 ```
 
