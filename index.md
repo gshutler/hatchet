@@ -86,8 +86,8 @@ logging messages taking either a `String` or a lazily-evaluated block:
  * `fatal`
 
 It is recommended you use the block version as it avoids needless string
-interpolation when possible. However, if you are providing an error reads better
-to use the `String` version, passing the error as a second parameter:
+interpolation when possible. However, if you are providing an error it reads
+better to use the `String` version, passing the error as a second parameter:
 
 {% highlight ruby %}
 log.debug { "Not #{evaluated} unless debug messages enabled" }
