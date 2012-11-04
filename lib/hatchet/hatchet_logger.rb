@@ -173,6 +173,7 @@ module Hatchet
           end
         end
       end
+      nil
     end
 
     # Private: Determines the contextual name of the host object.

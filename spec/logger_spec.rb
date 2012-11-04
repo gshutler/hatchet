@@ -41,6 +41,12 @@ describe HatchetLogger do
         refute disabled_appender.add_called
       end
 
+      it 'should return nil from the call' do
+        returned = subject.send(level, message)
+
+        assert returned.nil?, 'logging calls should return nil'
+      end
+
       describe 'with an error' do
         let(:error) { StandardError.new }
 
