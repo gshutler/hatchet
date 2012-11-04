@@ -98,6 +98,16 @@ describe HatchetLogger do
     end
   end
 
+  describe 'failing appender' do
+    before do
+      configuration.appenders << FailingAppender.new
+    end
+
+    it 'does not fail' do
+      subject.info 'Will fail for one appender'
+    end
+  end
+
   describe 'naming context' do
     let(:context_name) do
       subject.fatal 'Message'
