@@ -19,6 +19,10 @@ class CustomAppender
   def enabled?(level, context)
     # Code determining whether messages will be logged for the
     # level and context.
+    #
+    # For the majority of cases you do not need to implement this yourself.
+    # Instead you can include the Hatchet::LevelManager module into your class
+    # this will do the work required for you.
   end
 
   def add(level, context, message)
@@ -73,7 +77,8 @@ separated by `::`.
 
 #### message
 
-The `Hatchet::Message` to log.
+The [`Hatchet::Message`](https://github.com/gshutler/hatchet/blob/master/lib/hatchet/message.rb)
+to log.
 
 ### Remarks
 
@@ -85,30 +90,6 @@ The `add` method will only be called by Hatchet if the `enabled?` method returns
 It is recommended you make your appender's [logging level](/hatchet/configuration.html#levels)
 and [message formatting](/hatchet/configuration.html#formatters) configurable in
 the same way as standard appenders.
-
-### Configuration
-
-Appenders are expected to yield themselves to a block, when given, upon
-creation:
-
-{% highlight ruby %}
-class CustomAppender
-
-  def intialize
-    yield self if block_given?
-  end
-
-  def enabled?(level, context)
-    # Code determining whether messages will be logged for the
-    # level and context.
-  end
-
-  def add(level, context, message)
-    # Code to log a message.
-  end
-
-end
-{% endhighlight %}
 
 ### Level management
 
@@ -134,13 +115,33 @@ The [`LevelManager`](https://github.com/gshutler/hatchet/blob/master/lib/hatchet
 adds the standard `level` configuration method to your appender and implements
 the `enabled?` method too.
 
+### Configuration
+
+Appenders are expected to yield themselves to a block, when given, upon
+creation:
+
+{% highlight ruby %}
+class CustomAppender
+  include Hatchet::LevelManager
+
+  def intialize
+    yield self if block_given?
+  end
+
+  def add(level, context, message)
+    # Code to log a message.
+  end
+
+end
+{% endhighlight %}
+
 ### Message formatting
 
 It is recommended that you format messages via a formatter object. This will
 enable users of your appender to easily change the format of messages it
 produces without you having to modify your appender.
 
-Of course, you can specify a preferred appender by setting that as the default.
+Of course, you can specify a preferred formattr by setting that as the default.
 You may even chose to ship a [custom formatter](/hatchet/extending/formatters.html)
 alongside your appender.
 
