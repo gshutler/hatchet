@@ -67,16 +67,34 @@ module Hatchet
       # Public: Logs a message at the given level.
       #
       # message - An already evaluated message, usually a String (default: nil).
+      # error   - An error which is associated with the message (default: nil).
       # block   - An optional block which will provide a message when invoked.
       #
       # One of message or block must be provided. If both are provided then the
       # block is preferred as it is assumed to provide more detail.
       #
+      # In general, you should use the block style for any message not related
+      # to an error. This is because any unneccessary String interpolation is
+      # avoided making unwritten debug calls, for example, less expensive.
+      #
+      # When logging errors it is advised that you include some details of the
+      # error within the regular message, perhaps the error's message, but leave
+      # the inclusion of the stack trace up to your appenders and their
+      # formatters.
+      #
+      # Examples
+      #
+      #   debug { "A fine grained message" }
+      #   info  { "An interesting message" }
+      #   warn  { "A message worth highlighting" }
+      #   error "A message relating to an exception", e
+      #   fatal "A message causing application failure", e
+      #
       # Returns nothing.
       #
-      define_method level do |message = nil, &block|
+      define_method level do |message = nil, error = nil, &block|
         return unless message or block
-        add level, Message.new(message, &block)
+        add level, Message.new(message, error, &block)
       end
 
       # Public: Returns true if any of the appenders will log messages for the
@@ -150,11 +168,12 @@ module Hatchet
           begin
             appender.add(level, @context, message)
           rescue => e
-            puts "Failed to log message for #{context} with appender #{appender} - #{level} - #{message}\n"
+            puts "Failed to log message for #{@context} with appender #{appender} - #{level} - #{message}\n"
             puts "#{e}\n"
           end
         end
       end
+      nil
     end
 
     # Private: Determines the contextual name of the host object.

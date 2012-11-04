@@ -40,6 +40,23 @@ describe HatchetLogger do
 
         refute disabled_appender.add_called
       end
+
+      it 'should return nil from the call' do
+        returned = subject.send(level, message)
+
+        assert returned.nil?, 'logging calls should return nil'
+      end
+
+      describe 'with an error' do
+        let(:error) { StandardError.new }
+
+        it 'should pass the error through to the appender' do
+          subject.send level, message, error
+          received = appender.messages.last
+
+          assert error == received.message.error
+        end
+      end
     end
   end
 
@@ -78,6 +95,16 @@ describe HatchetLogger do
       subject.fatal
 
       assert_empty appender.messages
+    end
+  end
+
+  describe 'failing appender' do
+    before do
+      configuration.appenders << FailingAppender.new
+    end
+
+    it 'does not fail' do
+      subject.info 'Will fail for one appender'
     end
   end
 
