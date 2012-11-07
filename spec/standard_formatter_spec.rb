@@ -10,7 +10,7 @@ describe StandardFormatter do
 
   describe 'when formatting a message' do
     before do
-      @message = 'Hello, World'
+      @message = Message.new('Hello, World')
       @context = 'Custom::Context'
       @level   = :info
       @formatted_message = subject.format(@level, @context, @message)
@@ -52,6 +52,39 @@ describe StandardFormatter do
       it 'outputs the pid and the thread object_id' do
         assert_equal "#{Process.pid}##{@thread.object_id}", thread_name
       end
+    end
+
+    describe 'with an error' do
+
+      before do
+        error = OpenStruct.new(message: 'Boom!', backtrace: ['foo.rb:1:a', 'foo.rb:20:b'])
+        @message = Message.new('  Hello, World  ', error)
+      end
+
+      describe 'with backtraces enabled' do
+
+        it 'outputs the message in the LEVEL - CONTEXT - MESSAGE format' do
+          formatted_message = subject.format(@level, @context, @message)
+          backtrace = formatted_message.split("\n").drop(1)
+          assert_equal ['    foo.rb:1:a', '    foo.rb:20:b'], backtrace
+        end
+
+      end
+
+      describe 'with backtraces disabled' do
+
+        before do
+          subject.backtrace = false
+        end
+
+        it 'outputs the message in the LEVEL - CONTEXT - MESSAGE format' do
+          formatted_message = subject.format(@level, @context, @message)
+          backtrace = formatted_message.split("\n").drop(1)
+          assert_empty backtrace
+        end
+
+      end
+
     end
 
     if ENV["BENCH"] then

@@ -1,5 +1,11 @@
 # Release notes
 
+## 0.0.19
+
+ * Changed core formatters to output an indented backtrace after a message when
+   an error is present, can be disabled via the formatter's `backtrace=`
+   attribute
+
 ## 0.0.18
 
  * Made the presence of a `formatter=` method on appenders optional
