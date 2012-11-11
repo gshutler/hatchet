@@ -52,6 +52,22 @@ describe SimpleFormatter do
       end
 
     end
+
+    describe 'with thread context' do
+
+      before do
+        subject.thread_context = true
+        @message = Message.new('  Hello, World  ')
+      end
+
+      it 'outputs the message in the [THREAD] - LEVEL - CONTEXT - MESSAGE format' do
+        message = subject.format(:info, 'Custom::Context', @message)
+        assert "[#{Process.pid}] - INFO - Custom::Context - Hello, World" == message, "got #{message}"
+      end
+
+    end
+
   end
+
 end
 

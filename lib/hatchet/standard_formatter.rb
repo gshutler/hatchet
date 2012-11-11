@@ -6,6 +6,7 @@ module Hatchet
   #
   class StandardFormatter
     include BacktraceFormatter
+    include ThreadNameFormatter
 
     # Public: Creates a new instance.
     #
@@ -29,6 +30,7 @@ module Hatchet
     def format(level, context, message)
       msg = message.to_s.strip
       msg = "#{timestamp} [#{thread_name}] #{format_level level} #{context} - #{msg}"
+
       with_backtrace(message, msg)
     end
 
@@ -51,17 +53,6 @@ module Hatchet
 
       @millis = millis
       @last = @date + "00#{millis}"[-3..-1]
-    end
-
-    # Private: Returns the name of the current thread from the processes pid and
-    # the threads object_id when it is not the main thread for the process.
-    #
-    def thread_name
-      if Thread.current == Thread.main
-        Process.pid
-      else
-        "#{Process.pid}##{Thread.current.object_id}"
-      end
     end
 
     # Private: Returns the level formatted for log output as a String.

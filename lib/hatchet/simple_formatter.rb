@@ -7,6 +7,12 @@ module Hatchet
   #
   class SimpleFormatter
     include BacktraceFormatter
+    include ThreadNameFormatter
+
+    # Public: Gets or sets whether the context of the thread (pid and thread ID)
+    # should be included into the output messages.
+    #
+    attr_accessor :thread_context
 
     # Public: Returns the formatted message.
     #
@@ -16,14 +22,21 @@ module Hatchet
     #
     # Returns messages in the format:
     #
-    #   LEVEL - CONTEXT - MESSAGE
+    #   [THREAD] - LEVEL - CONTEXT - MESSAGE
     #       BACKTRACE
     #
-    # The backtrace is only present if the message contains an error.
+    # The backtrace is only present if the message contains an error and the
+    # presence of the context of the thread context is managed via the
+    # #thread_context attribute.
     #
     def format(level, context, message)
       msg = message.to_s.strip
-      msg = "#{level.to_s.upcase} - #{context} - #{msg}"
+
+      if thread_context
+        msg = "[#{thread_name}] - #{level.to_s.upcase} - #{context} - #{msg}"
+      else
+        msg = "#{level.to_s.upcase} - #{context} - #{msg}"
+      end
 
       with_backtrace(message, msg)
     end
