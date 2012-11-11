@@ -1,5 +1,11 @@
 # Release notes
 
+## 0.0.20
+
+ * Added a `#thread_context` attribute to the `SimpleFormatter` that is `false`
+   by default, but when set to `true` will output the context of the thread
+   within messages in the same style as the `StandardFormatter`
+
 ## 0.0.19
 
  * Changed core formatters to output an indented backtrace after a message when
