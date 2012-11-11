@@ -5,17 +5,12 @@ module Hatchet
   # Public: Standard formatter class. Outputs messages in the TTCC of log4j.
   #
   class StandardFormatter
-
-    # Public: Gets or sets whether backtraces should be output when messages
-    # contain an error with one.
-    #
-    attr_accessor :backtrace
+    include BacktraceFormatter
 
     # Public: Creates a new instance.
     #
     def initialize
       @secs = 0
-      self.backtrace = true
     end
 
     # Public: Returns the formatted message.
@@ -33,11 +28,8 @@ module Hatchet
     #
     def format(level, context, message)
       msg = message.to_s.strip
-      if self.backtrace && message.error && message.error.respond_to?(:backtrace)
-        indented_backtrace = message.error.backtrace.map { |line| "    #{line}" }.to_a
-        msg = ([msg] + indented_backtrace).join("\n")
-      end
-      "#{timestamp} [#{thread_name}] #{format_level level} #{context} - #{msg}"
+      msg = "#{timestamp} [#{thread_name}] #{format_level level} #{context} - #{msg}"
+      with_backtrace(message, msg)
     end
 
     private

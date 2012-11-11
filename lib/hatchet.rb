@@ -3,6 +3,7 @@
 require 'logger'
 
 require_relative 'hatchet/level_manager'
+require_relative 'hatchet/backtrace_formatter'
 require_relative 'hatchet/configuration'
 require_relative 'hatchet/delegating_formatter'
 require_relative 'hatchet/hatchet_logger'
