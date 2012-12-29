@@ -1,5 +1,9 @@
 # Release notes
 
+## 0.1.0
+
+No changes from 0.0.20, just time for a minor version release.
+
 ## 0.0.20
 
  * Added a `#thread_context` attribute to the `SimpleFormatter` that is `false`
