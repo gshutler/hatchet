@@ -10,7 +10,7 @@ describe SimpleFormatter do
     describe 'without an error' do
 
       before do
-        @message = Message.new('  Hello, World  ')
+        @message = Message.new([], '  Hello, World  ')
       end
 
       it 'outputs the message in the LEVEL - CONTEXT - MESSAGE format' do
@@ -24,7 +24,7 @@ describe SimpleFormatter do
 
       before do
         error = OpenStruct.new(message: 'Boom!', backtrace: ['foo.rb:1:a', 'foo.rb:20:b'])
-        @message = Message.new('  Hello, World  ', error)
+        @message = Message.new([], '  Hello, World  ', error)
       end
 
       describe 'with backtraces enabled' do
@@ -57,7 +57,7 @@ describe SimpleFormatter do
 
       before do
         subject.thread_context = true
-        @message = Message.new('  Hello, World  ')
+        @message = Message.new([], '  Hello, World  ')
       end
 
       it 'outputs the message in the [THREAD] - LEVEL - CONTEXT - MESSAGE format' do

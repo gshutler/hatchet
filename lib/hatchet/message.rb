@@ -16,8 +16,13 @@ module Hatchet
     #
     attr_reader :error
 
+    # Public: Gets the nested diagnostic context values.
+    #
+    attr_reader :ndc
+
     # Internal: Creates a new message.
     #
+    # ndc     - An Array of nested diagnostic context values.
     # message - An already evaluated message, usually a String (default: nil).
     # error   - An error that is associated with the message (default: nil).
     # block   - An optional block which will provide a message when invoked.
@@ -27,10 +32,11 @@ module Hatchet
     #
     # Examples
     #
-    #   Message.new "Evaluated message"
-    #   Message.new { "Lazily evaluated message" }
+    #   Message.new([], "Evaluated message")
+    #   Message.new(%w{Foo Bar}) { "Lazily evaluated message" }
     #
-    def initialize(message = nil, error = nil, &block)
+    def initialize(ndc, message = nil, error = nil, &block)
+      @ndc = ndc
       @block = block
       @error = error
       @message = message unless @block

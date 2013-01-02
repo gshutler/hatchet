@@ -27,6 +27,44 @@ require_relative 'hatchet/version'
 #
 module Hatchet
 
+  class NestedDiagnosticContext
+
+    def self.current
+      Thread.current[:hatchet_ndc] ||= NestedDiagnosticContext.new
+    end
+
+    def initialize
+      clear!
+    end
+
+    def push(*values)
+      @context.push(*values)
+      nil
+    end
+
+    def pop
+      @context.pop
+    end
+
+    def scope(*values, &block)
+      before = @context.clone
+      push(*values)
+      block.call
+    ensure
+      @context = before
+    end
+
+    def clear!
+      @context = []
+      nil
+    end
+
+    def to_a
+      @context.clone
+    end
+
+  end
+
   # Public: Returns a HatchetLogger for the object.
   #
   # The logger has 5 logging methods. Those are, in decreasing order of
@@ -66,7 +104,7 @@ module Hatchet
   # Returns a HatchetLogger for the object.
   #
   def logger
-    @_hatchet_logger ||= HatchetLogger.new self, Hatchet.configuration
+    @_hatchet_logger ||= HatchetLogger.new(self, Hatchet.configuration, Hatchet::NestedDiagnosticContext.current)
   end
 
   # Public: Returns a HatchetLogger for the object.

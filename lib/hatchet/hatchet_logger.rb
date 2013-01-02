@@ -64,11 +64,21 @@ module Hatchet
     #
     # host          - The object the logger gains its context from.
     # configuration - The configuration of Hatchet.
+    # ndc           - The nested diagnostic context of the logger.
     #
-    def initialize(host, configuration)
-      @context = context host
+    def initialize(host, configuration, ndc)
+      @context = host_name(host)
       @configuration = configuration
       @appenders = configuration.appenders
+      @ndc = ndc
+    end
+
+    def ndc(*values, &block)
+      if block
+        @ndc.scope(*values, &block)
+      else
+        @ndc
+      end
     end
 
     [:debug, :info, :warn, :error, :fatal].each do |level|
@@ -103,7 +113,7 @@ module Hatchet
       #
       define_method level do |message = nil, error = nil, &block|
         return unless message or block
-        add level, Message.new(message, error, &block)
+        add level, Message.new(@ndc.to_a, message, error, &block)
       end
 
       # Public: Returns true if any of the appenders will log messages for the
@@ -193,7 +203,7 @@ module Hatchet
     # Ruby, the host itself when the host is a module, otherwise the object's
     # class.
     #
-    def context(host)
+    def host_name(host)
       if host.inspect == 'main'
         'main'
       elsif [Module, Class].include? host.class
