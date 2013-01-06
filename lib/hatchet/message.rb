@@ -36,13 +36,37 @@ module Hatchet
     #
     # Examples
     #
-    #   Message.new(ndc: [], message: "Evaluated message")
+    #   Message.new(ndc: [], message: "Evaluated message", error: e)
     #   Message.new(ndc: %w{Foo Bar}) { "Lazily evaluated message" }
     #
-    def initialize(args = {}, &block)
-      @ndc     = args[:ndc] || []
-      @error   = args[:error]
-      @message = args[:message] unless block
+    # The signature of the constructor was originally:
+    #
+    # message - An already evaluated message, usually a String (default: nil).
+    # error   - An error that is associated with the message (default: nil).
+    # block   - An optional block which will provide a message when invoked.
+    #
+    # This format is also supported for compatibility to version 0.1.0 and below
+    # and will be deprecated in the future.
+    #
+    # Examples
+    #
+    #   Message.new("Evaluated message", e)
+    #   Message.new { "Lazily evaluated message" }
+    #
+    def initialize(args = {}, error = nil, &block)
+      if args.kind_of? Hash
+        # If args is a Hash then using new constructor format or no parameters
+        # specified. Either way, use the new format.
+        @ndc     = args[:ndc] || []
+        @error   = args[:error]
+        @message = args[:message] unless block
+      else
+        # Otherwise assume the old format and coerce args accordingly.
+        @ndc = []
+        @error = error
+        @message = args unless block
+      end
+
       @block   = block
     end
 
