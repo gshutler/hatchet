@@ -183,6 +183,21 @@ describe HatchetLogger do
         assert_equal [], appender.messages.last.message.ndc
       end
 
+      it 'pops a specified number of contexts' do
+        subject.ndc.push(:foo, :bar, :baz)
+
+        subject.info 'Message'
+        assert_equal [:foo, :bar, :baz], appender.messages.last.message.ndc
+
+        subject.ndc.pop(2)
+        subject.info 'Message'
+        assert_equal [:foo], appender.messages.last.message.ndc
+
+        subject.ndc.pop(2)
+        subject.info 'Message'
+        assert_equal [], appender.messages.last.message.ndc
+      end
+
       it 'scopes contexts when used with blocks' do
         subject.ndc.scope(:foo) do
           subject.info 'Message'
@@ -191,11 +206,6 @@ describe HatchetLogger do
 
         subject.info 'Message'
         assert_equal [], appender.messages.last.message.ndc
-
-        subject.ndc(:bar) do
-          subject.info 'Message'
-          assert_equal [:bar], appender.messages.last.message.ndc
-        end
       end
 
       it 'can clear all contexts' do

@@ -8,6 +8,9 @@ module Hatchet
   # If an error is associated with the message this will be available via the
   # #error attribute.
   #
+  # The nested diagnostic context of the message will be availble via the #ndc
+  # attribute.
+  #
   # Blocks will be lazily evaluated once for all appenders when required.
   #
   class Message
@@ -31,9 +34,6 @@ module Hatchet
     #                    (default: nil).
     # block - An optional block which will provide a message when invoked.
     #
-    # One of message or block must be provided. If both are provided then the
-    # block is preferred as it is assumed to provide more detail.
-    #
     # Examples
     #
     #   Message.new(ndc: [], message: "Evaluated message", error: e)
@@ -52,6 +52,9 @@ module Hatchet
     #
     #   Message.new("Evaluated message", e)
     #   Message.new { "Lazily evaluated message" }
+    #
+    # One of message or block must be provided. If both are provided then the
+    # block is preferred as it is assumed to provide more detail.
     #
     def initialize(args = {}, error = nil, &block)
       if args.kind_of? Hash

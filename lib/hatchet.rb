@@ -1,7 +1,5 @@
 # -*- encoding: utf-8 -*-
 
-require 'logger'
-
 require_relative 'hatchet/level_manager'
 require_relative 'hatchet/backtrace_formatter'
 require_relative 'hatchet/thread_name_formatter'
@@ -10,6 +8,7 @@ require_relative 'hatchet/delegating_formatter'
 require_relative 'hatchet/hatchet_logger'
 require_relative 'hatchet/logger_appender'
 require_relative 'hatchet/message'
+require_relative 'hatchet/nested_diagnostic_context'
 require_relative 'hatchet/plain_formatter'
 require_relative 'hatchet/simple_formatter'
 require_relative 'hatchet/standard_formatter'
@@ -26,44 +25,6 @@ require_relative 'hatchet/version'
 # to the standard Logger within the reference LoggerAppender implementation.
 #
 module Hatchet
-
-  class NestedDiagnosticContext
-
-    def self.current
-      Thread.current[:hatchet_ndc] ||= NestedDiagnosticContext.new
-    end
-
-    def initialize
-      clear!
-    end
-
-    def push(*values)
-      @context.push(*values)
-      nil
-    end
-
-    def pop
-      @context.pop
-    end
-
-    def scope(*values, &block)
-      before = @context.clone
-      push(*values)
-      block.call
-    ensure
-      @context = before
-    end
-
-    def clear!
-      @context = []
-      nil
-    end
-
-    def to_a
-      @context.clone
-    end
-
-  end
 
   # Public: Returns a HatchetLogger for the object.
   #

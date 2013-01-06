@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 
+require 'logger'
+
 module Hatchet
 
   # Public: Class that handles logging calls and distributes them to all its
@@ -60,6 +62,10 @@ module Hatchet
       Logger::FATAL => :fatal
     }
 
+    # Public: Gets the NestedDiagnosticContext for the logger.
+    #
+    attr_reader :ndc
+
     # Internal: Creates a new logger.
     #
     # host          - The object the logger gains its context from.
@@ -71,14 +77,6 @@ module Hatchet
       @configuration = configuration
       @appenders = configuration.appenders
       @ndc = ndc
-    end
-
-    def ndc(*values, &block)
-      if block
-        @ndc.scope(*values, &block)
-      else
-        @ndc
-      end
     end
 
     [:debug, :info, :warn, :error, :fatal].each do |level|
