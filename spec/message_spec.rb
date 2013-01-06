@@ -4,7 +4,7 @@ require_relative 'spec_helper'
 
 describe Message do
   describe 'providing an evaluted message' do
-    let(:subject) { Message.new([], 'Evaluated') }
+    let(:subject) { Message.new(ndc: [], message: 'Evaluated') }
 
     it 'returns the given message' do
       assert_equal 'Evaluated', subject.to_s
@@ -14,7 +14,7 @@ describe Message do
   describe 'providing a block message' do
     let(:subject) do
       @evaluated = 0
-      Message.new([]) do
+      Message.new(ndc: []) do
         @evaluated += 1
         'Block'
       end
@@ -33,7 +33,7 @@ describe Message do
 
   describe 'providing both an evaluated and block message' do
     let(:subject) do
-      Message.new([], 'Evaluated') do
+      Message.new(ndc: [], message: 'Evaluated') do
         'Block'
       end
     end

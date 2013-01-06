@@ -10,7 +10,7 @@ describe StandardFormatter do
 
   describe 'when formatting a message' do
     before do
-      @message = Message.new([], 'Hello, World')
+      @message = Message.new(ndc: [], message: 'Hello, World')
       @context = 'Custom::Context'
       @level   = :info
       @formatted_message = subject.format(@level, @context, @message)
@@ -58,7 +58,7 @@ describe StandardFormatter do
 
       before do
         error = OpenStruct.new(message: 'Boom!', backtrace: ['foo.rb:1:a', 'foo.rb:20:b'])
-        @message = Message.new([], '  Hello, World  ', error)
+        @message = Message.new(ndc: [], message: '  Hello, World  ', error: error)
       end
 
       describe 'with backtraces enabled' do

@@ -113,7 +113,7 @@ module Hatchet
       #
       define_method level do |message = nil, error = nil, &block|
         return unless message or block
-        add level, Message.new(@ndc.to_a, message, error, &block)
+        add level, Message.new(ndc: @ndc.to_a, message: message, error: error, &block)
       end
 
       # Public: Returns true if any of the appenders will log messages for the
