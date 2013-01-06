@@ -67,6 +67,19 @@ describe SimpleFormatter do
 
     end
 
+    describe 'with ndc' do
+
+      before do
+        @message = Message.new(ndc: [:foo, 123], message: '  Hello, World  ')
+      end
+
+      it 'outputs the message in the [THREAD] - LEVEL - CONTEXT NDC - MESSAGE format' do
+        message = subject.format(:info, 'Custom::Context', @message)
+        assert "INFO - Custom::Context foo 123 - Hello, World" == message, "got #{message}"
+      end
+
+    end
+
   end
 
 end
