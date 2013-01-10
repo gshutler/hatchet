@@ -10,7 +10,8 @@ describe StandardFormatter do
 
   describe 'when formatting a message' do
     before do
-      @message = Message.new('Hello, World')
+      ndc = NestedDiagnosticContext::ContextStack.new([:foo, 12])
+      @message = Message.new(ndc: ndc, message: 'Hello, World')
       @context = 'Custom::Context'
       @level   = :info
       @formatted_message = subject.format(@level, @context, @message)
@@ -37,7 +38,7 @@ describe StandardFormatter do
     end
 
     it 'formats the message after the time as expected' do
-      expected = "[#{Process.pid}] #{@level.to_s.upcase.ljust 5} #{@context} - #{@message}"
+      expected = "[#{Process.pid}] #{@level.to_s.upcase.ljust 5} #{@context} foo 12 - #{@message}"
       actual_without_time = @formatted_message[24..-1]
 
       assert_equal expected, actual_without_time
@@ -58,7 +59,7 @@ describe StandardFormatter do
 
       before do
         error = OpenStruct.new(message: 'Boom!', backtrace: ['foo.rb:1:a', 'foo.rb:20:b'])
-        @message = Message.new('  Hello, World  ', error)
+        @message = Message.new(ndc: [], message: '  Hello, World  ', error: error)
       end
 
       describe 'with backtraces enabled' do
@@ -98,7 +99,8 @@ describe StandardFormatter do
           end
 
           took = Time.now - start
-          limit = 0.4
+          limit = 0.6
+          puts "\nMessages took #{took} to generate\n"
           assert took < limit, "Expected messages to take less than #{limit} but took #{took}"
         end
       end

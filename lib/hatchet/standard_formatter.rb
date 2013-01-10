@@ -12,6 +12,7 @@ module Hatchet
     #
     def initialize
       @secs = 0
+      @level_cache = {}
     end
 
     # Public: Returns the formatted message.
@@ -29,7 +30,12 @@ module Hatchet
     #
     def format(level, context, message)
       msg = message.to_s.strip
-      msg = "#{timestamp} [#{thread_name}] #{format_level level} #{context} - #{msg}"
+
+      if message.ndc.any?
+        msg = "#{timestamp} [#{thread_name}] #{format_level(level)} #{context} #{message.ndc.join(' ')} - #{msg}"
+      else
+        msg = "#{timestamp} [#{thread_name}] #{format_level(level)} #{context} - #{msg}"
+      end
 
       with_backtrace(message, msg)
     end
@@ -58,7 +64,7 @@ module Hatchet
     # Private: Returns the level formatted for log output as a String.
     #
     def format_level(level)
-      level.to_s.upcase.ljust(5)
+      @level_cache[level] ||= level.to_s.upcase.ljust(5)
     end
 
   end

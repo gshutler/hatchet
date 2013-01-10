@@ -10,7 +10,7 @@ describe SimpleFormatter do
     describe 'without an error' do
 
       before do
-        @message = Message.new('  Hello, World  ')
+        @message = Message.new(ndc: [], message: '  Hello, World  ')
       end
 
       it 'outputs the message in the LEVEL - CONTEXT - MESSAGE format' do
@@ -24,7 +24,7 @@ describe SimpleFormatter do
 
       before do
         error = OpenStruct.new(message: 'Boom!', backtrace: ['foo.rb:1:a', 'foo.rb:20:b'])
-        @message = Message.new('  Hello, World  ', error)
+        @message = Message.new(ndc: [], message: '  Hello, World  ', error: error)
       end
 
       describe 'with backtraces enabled' do
@@ -57,12 +57,25 @@ describe SimpleFormatter do
 
       before do
         subject.thread_context = true
-        @message = Message.new('  Hello, World  ')
+        @message = Message.new(ndc: [], message: '  Hello, World  ')
       end
 
       it 'outputs the message in the [THREAD] - LEVEL - CONTEXT - MESSAGE format' do
         message = subject.format(:info, 'Custom::Context', @message)
         assert "[#{Process.pid}] - INFO - Custom::Context - Hello, World" == message, "got #{message}"
+      end
+
+    end
+
+    describe 'with ndc' do
+
+      before do
+        @message = Message.new(ndc: [:foo, 123], message: '  Hello, World  ')
+      end
+
+      it 'outputs the message in the [THREAD] - LEVEL - CONTEXT NDC - MESSAGE format' do
+        message = subject.format(:info, 'Custom::Context', @message)
+        assert "INFO - Custom::Context foo 123 - Hello, World" == message, "got #{message}"
       end
 
     end

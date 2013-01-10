@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 
+require 'logger'
+
 module Hatchet
 
   # Public: Class that handles logging calls and distributes them to all its
@@ -60,15 +62,21 @@ module Hatchet
       Logger::FATAL => :fatal
     }
 
+    # Public: Gets the NestedDiagnosticContext for the logger.
+    #
+    attr_reader :ndc
+
     # Internal: Creates a new logger.
     #
     # host          - The object the logger gains its context from.
     # configuration - The configuration of Hatchet.
+    # ndc           - The nested diagnostic context of the logger.
     #
-    def initialize(host, configuration)
-      @context = context host
+    def initialize(host, configuration, ndc)
+      @context = host_name(host)
       @configuration = configuration
       @appenders = configuration.appenders
+      @ndc = ndc
     end
 
     [:debug, :info, :warn, :error, :fatal].each do |level|
@@ -103,7 +111,7 @@ module Hatchet
       #
       define_method level do |message = nil, error = nil, &block|
         return unless message or block
-        add level, Message.new(message, error, &block)
+        add level, Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
       end
 
       # Public: Returns true if any of the appenders will log messages for the
@@ -193,7 +201,7 @@ module Hatchet
     # Ruby, the host itself when the host is a module, otherwise the object's
     # class.
     #
-    def context(host)
+    def host_name(host)
       if host.inspect == 'main'
         'main'
       elsif [Module, Class].include? host.class

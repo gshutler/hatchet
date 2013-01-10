@@ -8,9 +8,15 @@ describe HatchetLogger do
   let(:appenders)     { [appender, disabled_appender] }
   let(:configuration) { Configuration.new }
   let(:context)       { Context::Class.new }
+  let(:ndc)           { NestedDiagnosticContext.new }
+
+  def last_message
+    appender.messages.last.message
+  end
+
   let(:subject) do
     configuration.appenders.push(*appenders)
-    HatchetLogger.new context, configuration
+    HatchetLogger.new context, configuration, ndc
   end
 
   ALL_LEVELS.each do |level|
@@ -138,6 +144,82 @@ describe HatchetLogger do
         assert_equal 'main', context_name
       end
     end
+  end
+
+  describe 'nested diagnostic context' do
+
+    describe 'pushing context' do
+
+      it 'passes the context with the message' do
+        subject.ndc.push(:foo)
+        subject.info 'Message'
+        assert_equal [:foo], last_message.ndc.stack
+      end
+
+      it 'stacks contexts with the message' do
+        subject.ndc.push(:foo, :bar, :baz)
+        subject.info 'Message'
+        assert_equal [:foo, :bar, :baz], last_message.ndc.stack
+      end
+
+      it 'pops contexts individually' do
+        subject.ndc.push(:foo, :bar, :baz)
+
+        subject.info 'Message'
+        assert_equal [:foo, :bar, :baz], last_message.ndc.stack
+
+        subject.ndc.pop
+        subject.info 'Message'
+        assert_equal [:foo, :bar], last_message.ndc.stack
+
+        subject.ndc.pop
+        subject.info 'Message'
+        assert_equal [:foo], last_message.ndc.stack
+
+        subject.ndc.pop
+        subject.info 'Message'
+        assert_equal [], last_message.ndc.stack
+      end
+
+      it 'pops a specified number of contexts' do
+        subject.ndc.push(:foo, :bar, :baz)
+
+        subject.info 'Message'
+        assert_equal [:foo, :bar, :baz], last_message.ndc.stack
+
+        subject.ndc.pop(2)
+        subject.info 'Message'
+        assert_equal [:foo], last_message.ndc.stack
+
+        subject.ndc.pop(2)
+        subject.info 'Message'
+        assert_equal [], last_message.ndc.stack
+      end
+
+      it 'scopes contexts when used with blocks' do
+        subject.ndc.scope(:foo) do
+          subject.info 'Message'
+          assert_equal [:foo], last_message.ndc.stack
+        end
+
+        subject.info 'Message'
+        assert_equal [], last_message.ndc.stack
+      end
+
+      it 'can clear all contexts' do
+        subject.ndc.push(:foo, :bar, :baz)
+
+        subject.info 'Message'
+        assert_equal [:foo, :bar, :baz], last_message.ndc.stack
+
+        subject.ndc.clear!
+
+        subject.info 'Message'
+        assert_equal [], last_message.ndc.stack
+      end
+
+    end
+
   end
 end
 

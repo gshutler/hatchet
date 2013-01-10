@@ -1,5 +1,20 @@
 # Release notes
 
+## 0.2.0
+
+ * Added nested diagnostic context and Rack middleware to clear it between
+   requests
+
+### Note
+
+The `Hatchet::Message` constructor has been altered, going forward it will take
+a Hash of arguments instead of fixed arguments. It is currently backwards
+compatible but this will likely be dropped for 1.0.0 so it is advised you update
+your libraries now.
+
+This should only affect custom formatters which may want to take advantage of
+the nested diagnostic context which is now available anyway.
+
 ## 0.1.0
 
 No changes from 0.0.20, just time for a minor version release.

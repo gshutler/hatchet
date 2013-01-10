@@ -31,11 +31,12 @@ module Hatchet
     #
     def format(level, context, message)
       msg = message.to_s.strip
+      thread = thread_context ? "[#{thread_name}] - " : nil
 
-      if thread_context
-        msg = "[#{thread_name}] - #{level.to_s.upcase} - #{context} - #{msg}"
+      if message.ndc.any?
+        msg = "#{thread}#{level.to_s.upcase} - #{context} #{message.ndc.join(' ')} - #{msg}"
       else
-        msg = "#{level.to_s.upcase} - #{context} - #{msg}"
+        msg = "#{thread}#{level.to_s.upcase} - #{context} - #{msg}"
       end
 
       with_backtrace(message, msg)

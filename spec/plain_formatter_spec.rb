@@ -10,7 +10,7 @@ describe PlainFormatter do
     describe 'without an error' do
 
       before do
-        @message = Message.new('  Hello, World  ')
+        @message = Message.new(ndc: [], message: '  Hello, World  ')
       end
 
       it 'outputs the message in the MESSAGE format' do
@@ -24,7 +24,7 @@ describe PlainFormatter do
 
       before do
         error = OpenStruct.new(message: 'Boom!', backtrace: ['foo.rb:1:a', 'foo.rb:20:b'])
-        @message = Message.new('  Hello, World  ', error)
+        @message = Message.new(ndc: [], message: '  Hello, World  ', error: error)
       end
 
       describe 'with backtraces enabled' do

@@ -15,6 +15,13 @@ module Hatchet
     #
     self.config.hatchet = Hatchet.configuration
 
+    # Add the Hatchet::Middleware to the middleware stack to enable nested
+    # diagnostic context clearance between requests.
+    #
+    initializer "hatchet_railtie.insert_middleware" do |app|
+      app.config.middleware.use Hatchet::Middleware
+    end
+
     # Wrap the default Rails.logger, Rails.application.assets.logger, and all
     # log subscribers found in ActiveSupport::LogSubscriber.log_subscribers
     # collection on initialization.

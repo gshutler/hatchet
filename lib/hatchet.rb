@@ -1,7 +1,5 @@
 # -*- encoding: utf-8 -*-
 
-require 'logger'
-
 require_relative 'hatchet/level_manager'
 require_relative 'hatchet/backtrace_formatter'
 require_relative 'hatchet/thread_name_formatter'
@@ -10,6 +8,8 @@ require_relative 'hatchet/delegating_formatter'
 require_relative 'hatchet/hatchet_logger'
 require_relative 'hatchet/logger_appender'
 require_relative 'hatchet/message'
+require_relative 'hatchet/middleware'
+require_relative 'hatchet/nested_diagnostic_context'
 require_relative 'hatchet/plain_formatter'
 require_relative 'hatchet/simple_formatter'
 require_relative 'hatchet/standard_formatter'
@@ -66,7 +66,7 @@ module Hatchet
   # Returns a HatchetLogger for the object.
   #
   def logger
-    @_hatchet_logger ||= HatchetLogger.new self, Hatchet.configuration
+    @_hatchet_logger ||= HatchetLogger.new(self, Hatchet.configuration, Hatchet::NestedDiagnosticContext.current)
   end
 
   # Public: Returns a HatchetLogger for the object.
