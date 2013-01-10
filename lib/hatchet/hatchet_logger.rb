@@ -111,7 +111,7 @@ module Hatchet
       #
       define_method level do |message = nil, error = nil, &block|
         return unless message or block
-        add level, Message.new(ndc: @ndc.context, message: message, error: error, &block)
+        add level, Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
       end
 
       # Public: Returns true if any of the appenders will log messages for the

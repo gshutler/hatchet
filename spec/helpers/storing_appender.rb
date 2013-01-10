@@ -17,5 +17,6 @@ class StoringAppender
   def add(level, context, message)
     @messages << OpenStruct.new(level: level, context: context, message: message)
   end
+
 end
 
