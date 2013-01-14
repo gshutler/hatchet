@@ -1,5 +1,10 @@
 # Release notes
 
+## 0.2.1
+
+ * Changed the middleware to insert itself before `Rails::Rack::Logger` for
+   consistent behavior
+
 ## 0.2.0
 
  * Added nested diagnostic context and Rack middleware to clear it between

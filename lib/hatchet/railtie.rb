@@ -19,7 +19,7 @@ module Hatchet
     # diagnostic context clearance between requests.
     #
     initializer "hatchet_railtie.insert_middleware" do |app|
-      app.config.middleware.use Hatchet::Middleware
+      app.config.middleware.insert_before(Rails::Rack::Logger, Hatchet::Middleware)
     end
 
     # Wrap the default Rails.logger, Rails.application.assets.logger, and all
