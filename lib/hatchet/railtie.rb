@@ -34,21 +34,64 @@ module Hatchet
     # with Hatchet.
     #
     def self.wrap_rails_logger(app)
-      # Keep a handle to the original logger.
-      #
-      logger = Rails.logger
+      initialize_hatchet(Rails.logger)
+      replace_rails_loggers(app)
+    end
 
+    private
+
+    def self.replace_rails_loggers(app)
+      # Replace the Rails.logger with the application's Hatchet logger.
+      #
+      Rails.logger = app.logger
+      app.logger.debug { 'Replaced Rails logger with Hatchet' }
+
+      # Replace the logger of every subscriber in the
+      # ActiveSupport::LogSubscriber.log_subscribers collection by extending
+      # them with Hatchet.
+      #
+      ActiveSupport::LogSubscriber.log_subscribers.each do |subscriber|
+        app.logger.debug { "Replacing #{subscriber.class} logger with Hatchet" }
+        subscriber.extend Hatchet
+      end
+
+      # Replace the Rails.application.assets.logger with a logger that lives
+      # in a module beneath the application. This allows you to target the
+      # asset logger messages directly when managing levels.
+      #
+      # As you can guess by the description this is probably the riskiest so
+      # we do it last.
+      #
+      app.logger.debug { 'Replacing Rails asset logger with Hatchet' }
+
+      wrap_asset_logging(app)
+    rescue
+      # If anything goes wrong along the way log it and let the application
+      # continue.
+      #
+      Rails.logger.error { 'Failed to replace logger with Hatchet' }
+      Rails.logger.error { $! }
+    end
+
+    def self.wrap_asset_logging(app)
+      # Initially replace it with the application logger as it's better for
+      # this to be done if the next part fails.
+      #
+      Rails.application.assets.logger = app.logger
+
+      # Create the <Application>::Assets module and extend it with Hatchet so
+      # that it can replace the assets logger.
+      #
+      assets = Module.new
+      app.class.const_set 'Assets', assets
+      assets.extend Hatchet
+      Rails.application.assets.logger = assets.logger
+    end
+
+    def self.initialize_hatchet(logger)
       # Map the level of the logger so Hatchet uses the same.
       #
-      current_level =
-        case logger.level
-        when Logger::DEBUG then :debug
-        when Logger::INFO  then :info
-        when Logger::WARN  then :warn
-        when Logger::ERROR then :error
-        when Logger::FATAL then :fatal
-        else nil # If not recognized use Hatchet's default
-        end
+      current_level = logger_level(logger)
 
       # Add an appender that delegates to the current Rails.logger to Hatchet's
       # configuration.
@@ -61,50 +104,16 @@ module Hatchet
       # Extend the application with Hatchet.
       #
       app.extend Hatchet
+    end
 
-      begin
-        # Replace the Rails.logger with the application's Hatchet logger.
-        #
-        Rails.logger = app.logger
-        app.logger.debug { 'Replaced Rails logger with Hatchet' }
-
-        # Replace the logger of every subscriber in the
-        # ActiveSupport::LogSubscriber.log_subscribers collection by extending
-        # them with Hatchet.
-        #
-        ActiveSupport::LogSubscriber.log_subscribers.each do |subscriber|
-          app.logger.debug { "Replacing #{subscriber.class} logger with Hatchet" }
-          subscriber.extend Hatchet
-        end
-
-        # Replace the Rails.application.assets.logger with a logger that lives
-        # in a module beneath the application. This allows you to target the
-        # asset logger messages directly when managing levels.
-        #
-        # As you can guess by the description this is probably the riskiest so
-        # we do it last.
-        #
-        app.logger.debug { 'Replacing Rails asset logger with Hatchet' }
-
-        # Initially replace it with the application logger as it's better for
-        # this to be done if the next part fails.
-        #
-        Rails.application.assets.logger = app.logger
-
-        # Create the <Application>::Assets module and extend it with Hatchet so
-        # that it can replace the assets logger.
-        #
-        assets = Module.new
-        app.class.const_set 'Assets', assets
-        assets.extend Hatchet
-        Rails.application.assets.logger = assets.logger
-
-      rescue
-        # If anything goes wrong along the way log it and let the application
-        # continue.
-        #
-        logger.error { 'Failed to replace logger with Hatchet' }
-        logger.error { $! }
+    def self.logger_level(logger)
+      case logger.level
+      when Logger::DEBUG then :debug
+      when Logger::INFO  then :info
+      when Logger::WARN  then :warn
+      when Logger::ERROR then :error
+      when Logger::FATAL then :fatal
+      else nil # If not recognized use Hatchet's default
       end
     end
 
