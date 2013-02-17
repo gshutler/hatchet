@@ -27,7 +27,13 @@ module Hatchet
     # collection on initialization.
     #
     initializer 'hatchet_railtie.replace_logger' do |app|
+      Railtie.wrap_rails_logger(app)
+    end
 
+    # Internal: Class method to encapsulate the replacement of the Rails logger
+    # with Hatchet.
+    #
+    def self.wrap_rails_logger(app)
       # Keep a handle to the original logger.
       #
       logger = Rails.logger
@@ -101,6 +107,7 @@ module Hatchet
         logger.error { $! }
       end
     end
+
   end
 
 end
