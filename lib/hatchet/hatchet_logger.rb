@@ -105,9 +105,7 @@ module Hatchet
     # Returns nothing.
     #
     def debug(message = nil, error = nil, &block)
-      return unless message or block
-      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
-      add(:debug, msg)
+      add(:debug, message, error, &block)
     end
 
     # Public: Returns true if any of the appenders will log messages for the
@@ -145,9 +143,7 @@ module Hatchet
     # Returns nothing.
     #
     def info(message = nil, error = nil, &block)
-      return unless message or block
-      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
-      add(:info, msg)
+      add(:info, message, error, &block)
     end
 
     # Public: Returns true if any of the appenders will log messages for the
@@ -185,9 +181,7 @@ module Hatchet
     # Returns nothing.
     #
     def warn(message = nil, error = nil, &block)
-      return unless message or block
-      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
-      add(:warn, msg)
+      add(:warn, message, error, &block)
     end
 
     # Public: Returns true if any of the appenders will log messages for the
@@ -225,9 +219,7 @@ module Hatchet
     # Returns nothing.
     #
     def error(message = nil, error = nil, &block)
-      return unless message or block
-      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
-      add(:error, msg)
+      add(:error, message, error, &block)
     end
 
     # Public: Returns true if any of the appenders will log messages for the
@@ -265,9 +257,7 @@ module Hatchet
     # Returns nothing.
     #
     def fatal(message = nil, error = nil, &block)
-      return unless message or block
-      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
-      add(:fatal, msg)
+      add(:fatal, message, error, &block)
     end
 
     # Public: Returns true if any of the appenders will log messages for the
@@ -320,19 +310,26 @@ module Hatchet
     #
     # message - The message that will be logged by an appender when it is
     #           configured to log at the given level or lower.
+    # error   - An error which is associated with the message.
+    # block   - An optional block which will provide a message when invoked.
+    #
     #
     # Writes messages to STDOUT if any appender fails to complete the enabled
     # check or log the message.
     #
     # Returns nothing.
     #
-    def add(level, message)
+    def add(level, message, error, &block)
+      return unless message or block
+
+      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
+
       @appenders.each do |appender|
         if appender.enabled?(level, @context)
           begin
-            appender.add(level, @context, message)
+            appender.add(level, @context, msg)
           rescue => e
-            puts "Failed to log message for #{@context} with appender #{appender} - #{level} - #{message}\n"
+            puts "Failed to log message for #{@context} with appender #{appender} - #{level} - #{msg}\n"
             puts "#{e}\n"
           end
         end
