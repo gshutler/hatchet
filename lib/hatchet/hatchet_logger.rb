@@ -79,57 +79,204 @@ module Hatchet
       @ndc = ndc
     end
 
-    [:debug, :info, :warn, :error, :fatal].each do |level|
+    # Public: Logs a message at debug level.
+    #
+    # message - An already evaluated message, usually a String (default: nil).
+    # error   - An error which is associated with the message (default: nil).
+    # block   - An optional block which will provide a message when invoked.
+    #
+    # One of message or block must be provided. If both are provided then the
+    # block is preferred as it is assumed to provide more detail.
+    #
+    # In general, you should use the block style for any message not related
+    # to an error. This is because any unneccessary String interpolation is
+    # avoided making unwritten debug calls, for example, less expensive.
+    #
+    # When logging errors it is advised that you include some details of the
+    # error within the regular message, perhaps the error's message, but leave
+    # the inclusion of the stack trace up to your appenders and their
+    # formatters.
+    #
+    # Examples
+    #
+    #   debug { "A fine grained message" }
+    #   debug "A message relating to an exception", e
+    #
+    # Returns nothing.
+    #
+    def debug(message = nil, error = nil, &block)
+      return unless message or block
+      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
+      add(:debug, msg)
+    end
 
-      # Public: Logs a message at the given level.
-      #
-      # message - An already evaluated message, usually a String (default: nil).
-      # error   - An error which is associated with the message (default: nil).
-      # block   - An optional block which will provide a message when invoked.
-      #
-      # One of message or block must be provided. If both are provided then the
-      # block is preferred as it is assumed to provide more detail.
-      #
-      # In general, you should use the block style for any message not related
-      # to an error. This is because any unneccessary String interpolation is
-      # avoided making unwritten debug calls, for example, less expensive.
-      #
-      # When logging errors it is advised that you include some details of the
-      # error within the regular message, perhaps the error's message, but leave
-      # the inclusion of the stack trace up to your appenders and their
-      # formatters.
-      #
-      # Examples
-      #
-      #   debug { "A fine grained message" }
-      #   info  { "An interesting message" }
-      #   warn  { "A message worth highlighting" }
-      #   error "A message relating to an exception", e
-      #   fatal "A message causing application failure", e
-      #
-      # Returns nothing.
-      #
-      define_method level do |message = nil, error = nil, &block|
-        return unless message or block
-        add level, Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
-      end
+    # Public: Returns true if any of the appenders will log messages for the
+    # current context at debug level, otherwise returns false.
+    #
+    # Writes messages to STDOUT if any appender fails to complete the check.
+    #
+    def debug?
+      enabled? :debug
+    end
 
-      # Public: Returns true if any of the appenders will log messages for the
-      # current context, otherwise returns false.
-      #
-      # Writes messages to STDOUT if any appender fails to complete the check.
-      #
-      define_method "#{level}?" do
-        @appenders.any? do |appender|
-          begin
-            appender.enabled? level, @context
-          rescue => e
-            puts "Failed to check if level #{level} enabled for #{context} with appender #{appender}\n"
-            false
-          end
-        end
-      end
+    # Public: Logs a message at info level.
+    #
+    # message - An already evaluated message, usually a String (default: nil).
+    # error   - An error which is associated with the message (default: nil).
+    # block   - An optional block which will provide a message when invoked.
+    #
+    # One of message or block must be provided. If both are provided then the
+    # block is preferred as it is assumed to provide more detail.
+    #
+    # In general, you should use the block style for any message not related
+    # to an error. This is because any unneccessary String interpolation is
+    # avoided making unwritten info calls, for example, less expensive.
+    #
+    # When logging errors it is advised that you include some details of the
+    # error within the regular message, perhaps the error's message, but leave
+    # the inclusion of the stack trace up to your appenders and their
+    # formatters.
+    #
+    # Examples
+    #
+    #   info { "A fine grained message" }
+    #   info "A message relating to an exception", e
+    #
+    # Returns nothing.
+    #
+    def info(message = nil, error = nil, &block)
+      return unless message or block
+      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
+      add(:info, msg)
+    end
 
+    # Public: Returns true if any of the appenders will log messages for the
+    # current context at info level, otherwise returns false.
+    #
+    # Writes messages to STDOUT if any appender fails to complete the check.
+    #
+    def info?
+      enabled? :info
+    end
+
+    # Public: Logs a message at warn level.
+    #
+    # message - An already evaluated message, usually a String (default: nil).
+    # error   - An error which is associated with the message (default: nil).
+    # block   - An optional block which will provide a message when invoked.
+    #
+    # One of message or block must be provided. If both are provided then the
+    # block is preferred as it is assumed to provide more detail.
+    #
+    # In general, you should use the block style for any message not related
+    # to an error. This is because any unneccessary String interpolation is
+    # avoided making unwritten warn calls, for example, less expensive.
+    #
+    # When logging errors it is advised that you include some details of the
+    # error within the regular message, perhaps the error's message, but leave
+    # the inclusion of the stack trace up to your appenders and their
+    # formatters.
+    #
+    # Examples
+    #
+    #   warn { "A fine grained message" }
+    #   warn "A message relating to an exception", e
+    #
+    # Returns nothing.
+    #
+    def warn(message = nil, error = nil, &block)
+      return unless message or block
+      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
+      add(:warn, msg)
+    end
+
+    # Public: Returns true if any of the appenders will log messages for the
+    # current context at warn level, otherwise returns false.
+    #
+    # Writes messages to STDOUT if any appender fails to complete the check.
+    #
+    def warn?
+      enabled? :warn
+    end
+
+    # Public: Logs a message at error level.
+    #
+    # message - An already evaluated message, usually a String (default: nil).
+    # error   - An error which is associated with the message (default: nil).
+    # block   - An optional block which will provide a message when invoked.
+    #
+    # One of message or block must be provided. If both are provided then the
+    # block is preferred as it is assumed to provide more detail.
+    #
+    # In general, you should use the block style for any message not related
+    # to an error. This is because any unneccessary String interpolation is
+    # avoided making unwritten error calls, for example, less expensive.
+    #
+    # When logging errors it is advised that you include some details of the
+    # error within the regular message, perhaps the error's message, but leave
+    # the inclusion of the stack trace up to your appenders and their
+    # formatters.
+    #
+    # Examples
+    #
+    #   error { "A fine grained message" }
+    #   error "A message relating to an exception", e
+    #
+    # Returns nothing.
+    #
+    def error(message = nil, error = nil, &block)
+      return unless message or block
+      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
+      add(:error, msg)
+    end
+
+    # Public: Returns true if any of the appenders will log messages for the
+    # current context at error level, otherwise returns false.
+    #
+    # Writes messages to STDOUT if any appender fails to complete the check.
+    #
+    def error?
+      enabled? :error
+    end
+
+    # Public: Logs a message at fatal level.
+    #
+    # message - An already evaluated message, usually a String (default: nil).
+    # error   - An error which is associated with the message (default: nil).
+    # block   - An optional block which will provide a message when invoked.
+    #
+    # One of message or block must be provided. If both are provided then the
+    # block is preferred as it is assumed to provide more detail.
+    #
+    # In general, you should use the block style for any message not related
+    # to an error. This is because any unneccessary String interpolation is
+    # avoided making unwritten fatal calls, for example, less expensive.
+    #
+    # When logging errors it is advised that you include some details of the
+    # error within the regular message, perhaps the error's message, but leave
+    # the inclusion of the stack trace up to your appenders and their
+    # formatters.
+    #
+    # Examples
+    #
+    #   fatal { "A fine grained message" }
+    #   fatal "A message relating to an exception", e
+    #
+    # Returns nothing.
+    #
+    def fatal(message = nil, error = nil, &block)
+      return unless message or block
+      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
+      add(:fatal, msg)
+    end
+
+    # Public: Returns true if any of the appenders will log messages for the
+    # current context at fatal level, otherwise returns false.
+    #
+    # Writes messages to STDOUT if any appender fails to complete the check.
+    #
+    def fatal?
+      enabled? :fatal
     end
 
     # Public: Returns the default level of the logger's configuration.
@@ -191,6 +338,31 @@ module Hatchet
         end
       end
       nil
+    end
+
+    # Private: Returns true if any of the appenders will log messages for the
+    # current context at the given level, otherwise returns false.
+    #
+    # level   - The level of the message. One of, in decreasing order of
+    #           severity:
+    #
+    #             * fatal
+    #             * error
+    #             * warn
+    #             * info
+    #             * debug
+    #
+    # Writes messages to STDOUT if any appender fails to complete the check.
+    #
+    def enabled?(level)
+      @appenders.any? do |appender|
+        begin
+          appender.enabled? level, @context
+        rescue => e
+          puts "Failed to check if level #{level} enabled for #{context} with appender #{appender}\n"
+          false
+        end
+      end
     end
 
     # Private: Determines the contextual name of the host object.
