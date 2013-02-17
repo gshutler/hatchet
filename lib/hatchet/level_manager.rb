@@ -60,17 +60,12 @@ module Hatchet
     # level within the given context, otherwise returns false.
     #
     def enabled?(level, context)
-      unless self.levels_cache.key? context
-        lvl = self.levels_cache[nil]
-        root = []
-        context.to_s.split('::').each do |part|
-          root << part
-          path = root.join '::'
-          lvl = self.levels_cache[path] if self.levels_cache.key? path
-        end
-        self.levels_cache[context] = lvl
-      end
-      LEVELS.index(level) >= LEVELS.index(self.levels_cache[context])
+      lvl = self.levels_cache[context]
+
+      # Return false if no level is configured.
+      return false unless lvl
+
+      LEVELS.index(level) >= LEVELS.index(lvl)
     end
 
     # Internal: Returns a lazily duplicated Hash from the levels Hash which is
@@ -78,7 +73,13 @@ module Hatchet
     # subsequent lookups more efficient.
     #
     def levels_cache
-      @_levels_cache ||= self.levels.dup
+      @_levels_cache ||= begin
+        levels = Hash.new do |hash, key|
+          hash[key] = level_for_context(key)
+        end
+        self.levels.each { |k, v| levels[k] = v }
+        levels
+      end
     end
 
     # Internal: Removes the caching Hash so that it will be re-initialized.
@@ -88,6 +89,26 @@ module Hatchet
     #
     def clear_levels_cache!
       @_levels_cache = nil
+    end
+
+    private
+
+    # Private: Returns the minimum active logging level for the given context.
+    #
+    # context - The context of the logging call.
+    #
+    # Returns the minimum level that a message would be logged at for the given
+    # context.
+    #
+    def level_for_context(context)
+      lvl = self.levels_cache[nil]
+      root = []
+      context.to_s.split('::').each do |part|
+        root << part
+        path = root.join '::'
+        lvl = self.levels_cache[path] if self.levels_cache.key? path
+      end
+      lvl
     end
 
   end
