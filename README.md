@@ -5,7 +5,7 @@ filters.
 
 This README provides a brief overview of Hatchet, [see the main site for more complete documentation and tutorials](http://gshutler.github.com/hatchet/).
 
-[![Build Status](https://secure.travis-ci.org/gshutler/hatchet.png?branch=master)](http://travis-ci.org/gshutler/hatchet)
+[![Build Status](https://secure.travis-ci.org/gshutler/hatchet.png?branch=master)](http://travis-ci.org/gshutler/hatchet)  
 [![Code Climate](https://codeclimate.com/github/gshutler/hatchet.png)](https://codeclimate.com/github/gshutler/hatchet)
 
 ## Installation
