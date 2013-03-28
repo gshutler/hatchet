@@ -1,5 +1,10 @@
 # Release notes
 
+## 0.2.2
+
+ * Achieved a [4.0 GPA on Code * Climate](https://codeclimate.com/github/gshutler/hatchet)
+   and resolved all warnings when running in `-w` mode
+
 ## 0.2.1
 
  * Changed the middleware to insert itself before `Rails::Rack::Logger` for
