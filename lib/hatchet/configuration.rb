@@ -16,6 +16,7 @@ module Hatchet
     # Creates the levels Hash with a default logging level of info.
     #
     def initialize
+      @formatter = nil
       reset!
     end
 

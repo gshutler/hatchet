@@ -11,7 +11,9 @@ module Hatchet
     # Public: Creates a new instance.
     #
     def initialize
+      @backtrace = true
       @secs = 0
+      @millis = -1
       @level_cache = {}
     end
 

@@ -10,6 +10,12 @@ module Hatchet
   class PlainFormatter
     include BacktraceFormatter
 
+    # Public: Initialize a new instance.
+    #
+    def initialize
+      @backtrace = true
+    end
+
     # Public: Returns the formatted message.
     #
     # level   - The severity of the log message.
