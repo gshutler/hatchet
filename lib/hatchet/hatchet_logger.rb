@@ -295,6 +295,17 @@ module Hatchet
       @configuration.level level
     end
 
+    def flush!
+      @appenders.select{ |a| a.respond_to?(:flush!) }.each do |appender|
+        begin
+          appender.flush!
+        rescue => e
+          puts "Failed to flush appender #{appender}\n"
+          puts "#{e}\n"
+        end
+      end
+    end
+
     private
 
     # Private: Adds a message to each appender at the specified level.
@@ -322,7 +333,7 @@ module Hatchet
     def add(level, message, error, &block)
       return unless message or block
 
-      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
+      msg = Message.new(level: level, ndc: @ndc.context.clone, context: @context, message: message, error: error, &block)
 
       @appenders.each do |appender|
         if appender.enabled?(level, @context)

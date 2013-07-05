@@ -34,9 +34,9 @@ module Hatchet
       msg = message.to_s.strip
 
       if message.ndc.any?
-        msg = "#{timestamp} [#{thread_name}] #{format_level(level)} #{context} #{message.ndc.join(' ')} - #{msg}"
+        msg = "#{timestamp(message.time)} [#{thread_name}] #{format_level(level)} #{context} #{message.ndc.join(' ')} - #{msg}"
       else
-        msg = "#{timestamp} [#{thread_name}] #{format_level(level)} #{context} - #{msg}"
+        msg = "#{timestamp(message.time)} [#{thread_name}] #{format_level(level)} #{context} - #{msg}"
       end
 
       with_backtrace(message, msg)
@@ -46,9 +46,7 @@ module Hatchet
 
     # Private: Returns the current time as a String.
     #
-    def timestamp
-      time = Time.now
-
+    def timestamp(time = Time.now)
       secs = time.to_i
       millis = time.nsec/1000000
 

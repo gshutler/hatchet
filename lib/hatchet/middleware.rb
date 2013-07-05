@@ -26,6 +26,7 @@ module Hatchet
     def call(env)
       @app.call(env)
     ensure
+      log.flush!
       log.ndc.clear!
     end
 

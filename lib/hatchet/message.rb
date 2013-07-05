@@ -15,19 +15,33 @@ module Hatchet
   #
   class Message
 
+    # Public: Gets the context of the message, if given.
+    #
+    attr_reader :context
+
     # Public: Gets the error associated with this message, if given.
     #
     attr_reader :error
 
+    # Public: Gets the level the message was recorded at.
+    #
+    attr_reader :level
+
     # Public: Gets the nested diagnostic context values.
     #
     attr_reader :ndc
+
+    # Public: Gets the time the message was recorded.
+    #
+    attr_reader :time
 
     # Public: Creates a new message.
     #
     # args  - The Hash used to provide context for the message (default: {}):
     #         :ndc     - An Array of nested diagnostic context values
     #                    (default: []).
+    #         :context - The context of the message (default: nil).
+    #         :level   - The level of the message (default: nil).
     #         :message - An already evaluated message, usually a String
     #                    (default: nil).
     #         :error   - An error that is associated with the message
@@ -36,8 +50,8 @@ module Hatchet
     #
     # Examples
     #
-    #   Message.new(ndc: [], message: "Evaluated message", error: e)
-    #   Message.new(ndc: %w{Foo Bar}) { "Lazily evaluated message" }
+    #   Message.new(level: :info, ndc: [], message: "Evaluated message", error: e)
+    #   Message.new(level: :warn, ndc: %w{Foo Bar}) { "Lazily evaluated message" }
     #
     # The signature of the constructor was originally:
     #
@@ -57,11 +71,15 @@ module Hatchet
     # block is preferred as it is assumed to provide more detail.
     #
     def initialize(args = {}, error = nil, &block)
+      @time = Time.now
+
       if args.kind_of? Hash
         # If args is a Hash then using new constructor format or no parameters
         # specified. Either way, use the new format.
         @ndc     = args[:ndc] || []
+        @context = args[:context]
         @error   = args[:error]
+        @level   = args[:level]
         @message = args[:message] unless block
       else
         # Otherwise assume the old format and coerce args accordingly.
