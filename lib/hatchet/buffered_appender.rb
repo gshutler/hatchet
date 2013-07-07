@@ -2,10 +2,10 @@
 
 module Hatchet
 
-  class BufferedAppenderDecorator
+  class BufferedAppender
 
     def initialize(appender)
-      @buffer_name = :"hatchet_appender_buffer_#{appender.object_id}"
+      @buffer_name = "hatchet_appender_buffer_#{appender.object_id}"
       @appender = appender
     end
 

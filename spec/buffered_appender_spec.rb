@@ -2,9 +2,9 @@
 
 require_relative 'spec_helper'
 
-describe Hatchet::BufferedAppenderDecorator do
+describe Hatchet::BufferedAppender do
   let(:appender)          { StoringAppender.new :debug }
-  let(:buffered_appender) { BufferedAppenderDecorator.new(appender) }
+  let(:buffered_appender) { BufferedAppender.new(appender) }
 
   let(:configuration) { Configuration.new }
   let(:context)       { Context::Class.new }
