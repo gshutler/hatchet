@@ -9,7 +9,7 @@ module Hatchet
 
     # Public: The Array of configured appenders.
     #
-    attr_reader :appenders
+    attr_accessor :appenders
 
     # Internal: Creates a new configuration.
     #
@@ -82,6 +82,10 @@ module Hatchet
     #
     def configure
       yield self
+
+      # Ensure appenders is set.
+      #
+      appenders ||= []
 
       # Ensure every appender has a formatter and a level configuration.
       #
