@@ -85,11 +85,11 @@ module Hatchet
 
       # Ensure appenders is set.
       #
-      @appenders ||= []
+      self.appenders ||= []
 
       # Ensure every appender has a formatter and a level configuration.
       #
-      @appenders.each do |appender|
+      self.appenders.each do |appender|
         appender.formatter ||= @formatter if appender.respond_to? 'formatter='
         appender.levels = @levels         if appender.levels.empty?
       end

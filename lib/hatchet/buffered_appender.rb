@@ -3,14 +3,13 @@
 module Hatchet
 
   class BufferedAppender
+    extend Forwardable
+
+    def_delegators :@appender, :enabled?, :formatter, :formatter=, :levels, :levels=, :clear_levels_cache!
 
     def initialize(appender)
       @buffer_name = "hatchet_appender_buffer_#{appender.object_id}"
       @appender = appender
-    end
-
-    def enabled?(level, context)
-      @appender.enabled?(level, context)
     end
 
     def add(level, context, message)
