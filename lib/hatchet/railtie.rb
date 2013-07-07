@@ -34,7 +34,7 @@ module Hatchet
     # with Hatchet.
     #
     def self.wrap_rails_logger(app)
-      initialize_hatchet(Rails.logger)
+      initialize_hatchet(app, Rails.logger)
       replace_rails_loggers(app)
     end
 
@@ -88,7 +88,7 @@ module Hatchet
       Rails.application.assets.logger = assets.logger
     end
 
-    def self.initialize_hatchet(logger)
+    def self.initialize_hatchet(app, logger)
       # Map the level of the logger so Hatchet uses the same.
       #
       current_level = logger_level(logger)
