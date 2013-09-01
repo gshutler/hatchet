@@ -105,7 +105,7 @@ module Hatchet
     # Returns nothing.
     #
     def debug(message = nil, error = nil, &block)
-      add(:debug, message, error, &block)
+      add_to_appenders(:debug, message, error, &block)
     end
 
     # Public: Returns true if any of the appenders will log messages for the
@@ -143,7 +143,7 @@ module Hatchet
     # Returns nothing.
     #
     def info(message = nil, error = nil, &block)
-      add(:info, message, error, &block)
+      add_to_appenders(:info, message, error, &block)
     end
 
     # Public: Returns true if any of the appenders will log messages for the
@@ -181,7 +181,7 @@ module Hatchet
     # Returns nothing.
     #
     def warn(message = nil, error = nil, &block)
-      add(:warn, message, error, &block)
+      add_to_appenders(:warn, message, error, &block)
     end
 
     # Public: Returns true if any of the appenders will log messages for the
@@ -219,7 +219,7 @@ module Hatchet
     # Returns nothing.
     #
     def error(message = nil, error = nil, &block)
-      add(:error, message, error, &block)
+      add_to_appenders(:error, message, error, &block)
     end
 
     # Public: Returns true if any of the appenders will log messages for the
@@ -257,7 +257,7 @@ module Hatchet
     # Returns nothing.
     #
     def fatal(message = nil, error = nil, &block)
-      add(:fatal, message, error, &block)
+      add_to_appenders(:fatal, message, error, &block)
     end
 
     # Public: Returns true if any of the appenders will log messages for the
@@ -319,7 +319,7 @@ module Hatchet
     #
     # Returns nothing.
     #
-    def add(level, message, error, &block)
+    def add_to_appenders(level, message, error, &block)
       return unless message or block
 
       msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
