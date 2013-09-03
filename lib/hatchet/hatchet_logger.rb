@@ -295,6 +295,61 @@ module Hatchet
       @configuration.level level
     end
 
+    # Public: Returns nil, exists for greater compatibility with things
+    # expecting a standard Logger.
+    #
+    def formatter
+      nil
+    end
+
+    # Public: No-op, exists for greater compatibility with things expecting a
+    # standard Logger.
+    #
+    def formatter=(formatter)
+      # no-op for Logger protocol compatibility
+    end
+
+    # Public: Adds a message to each appender at the specified level.
+    #
+    # level   - The level of the message. One of, in decreasing order of
+    #           severity:
+    #
+    #             * Logger::FATAL
+    #             * Logger::ERROR
+    #             * Logger::WARN
+    #             * Logger::INFO
+    #             * Logger::DEBUG
+    #             * :fatal
+    #             * :error
+    #             * :warn
+    #             * :info
+    #             * :debug
+    #
+    # message - The message that will be logged by an appender when it is
+    #           configured to log at the given level or lower.
+    # block   - An optional block which will provide a message when invoked.
+    #
+    # Writes messages to STDOUT if any appender fails to complete the enabled
+    # check or log the message.
+    #
+    # Also aliased as log.
+    #
+    # Returns nothing.
+    #
+    def add(severity, message = nil, progname = nil, &block)
+      level = STANDARD_TO_SYMBOL[severity] || severity
+      add_to_appenders(level, message, nil, &block)
+    end
+
+    alias log add
+
+    # Public: No-op, exists for greater compatibility with things expecting a
+    # standard Logger.
+    #
+    def <<(msg)
+      nil
+    end
+
     private
 
     # Private: Adds a message to each appender at the specified level.

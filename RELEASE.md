@@ -1,5 +1,9 @@
 # Release notes
 
+## 0.2.5
+
+ * Rails 4.0 compatibility
+
 ## 0.2.2
 
  * Achieved a [4.0 GPA on Code * Climate](https://codeclimate.com/github/gshutler/hatchet)
