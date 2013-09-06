@@ -58,13 +58,11 @@ module Hatchet
         @secs = secs
         # NOTE: this string cannot be marshalled by older versions of Psych so avoid
         #       placing it in an instance variable
-        date = time.strftime('%Y-%m-%d %H:%M:%S.')
-      else
-        date = ""
+        @date = time.strftime('%Y-%m-%d %H:%M:%S')
       end
 
       @millis = millis
-      @last = date + "00#{millis}"[-3..-1]
+      @last = "#{@date}.#{millis.to_s.rjust(3,'0')}"
     end
 
     # Private: Returns the level formatted for log output as a String.
