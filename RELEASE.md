@@ -1,5 +1,10 @@
 # Release notes
 
+## 0.2.6
+
+ * Log messages can be objects deferring to `to_s` (thanks to
+   [@gstark](https://github.com/gstark))
+
 ## 0.2.5
 
  * Rails 4.0 compatibility
