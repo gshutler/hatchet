@@ -76,7 +76,7 @@ module Hatchet
     # Public: Returns the String representation of the message.
     #
     def to_s
-      (@message ||= @block.call).to_s
+      @evaluated_message ||= (@message || @block.call).to_s
     end
 
   end

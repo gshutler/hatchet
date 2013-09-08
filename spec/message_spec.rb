@@ -104,5 +104,36 @@ describe Message do
       end
     end
   end
+
+  if ENV["BENCH"] then
+    describe 'benchmarks' do
+      let(:subject) { Message.new(ndc: [], message: 'Evaluated') }
+
+      it 'invoking to_s once' do
+        start = Time.now
+
+        50_000.times do
+          subject.to_s
+        end
+
+        took = Time.now - start
+        puts "\nMessages took #{took} to generate\n"
+      end
+
+      it 'invoking to_s four times' do
+        start = Time.now
+
+        50_000.times do
+          subject.to_s
+          subject.to_s
+          subject.to_s
+          subject.to_s
+        end
+
+        took = Time.now - start
+        puts "\nMessages took #{took} to generate\n"
+      end
+    end
+  end
 end
 
