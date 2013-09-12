@@ -173,6 +173,13 @@ module Hatchet
     klass.extend Hatchet
   end
 
+  # Internal: Definition to avoid the cache variable from being persisted when
+  # an instance including Hatchet is marshalled into YAML.
+  #
+  def to_yaml_properties
+    super - [:@_hatchet_logger]
+  end
+
 end
 
 # If we are running in a Rails environment include the Hatchet::Railtie class.

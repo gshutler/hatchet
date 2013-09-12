@@ -13,4 +13,5 @@ Gem::Specification.new do |gem|
   gem.name          = "hatchet"
   gem.require_paths = ["lib"]
   gem.version       = Hatchet::VERSION
+  gem.license       = 'MIT'
 end
