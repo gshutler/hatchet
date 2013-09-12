@@ -1,5 +1,10 @@
 # Release notes
 
+## 0.2.7
+
+ * Hatchet can be marshalled to YAML safely (thanks to
+   [@gstark](https://github.com/gstark))
+
 ## 0.2.6
 
  * Log messages can be objects deferring to `to_s` (thanks to
