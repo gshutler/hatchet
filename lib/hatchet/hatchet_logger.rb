@@ -75,7 +75,6 @@ module Hatchet
     def initialize(host, configuration, ndc)
       @context = host_name(host)
       @configuration = configuration
-      @appenders = configuration.appenders
       @ndc = ndc
     end
 
@@ -350,6 +349,13 @@ module Hatchet
       nil
     end
 
+    # Internal: Specifies the instance variables to be serialized when
+    # converting the logger to YAML.
+    #
+    def to_yaml_properties
+      [:@context]
+    end
+
     private
 
     # Private: Adds a message to each appender at the specified level.
@@ -377,9 +383,14 @@ module Hatchet
     def add_to_appenders(level, message, error, &block)
       return unless message or block
 
+      # Ensure configuration and context set - can be lost by marshalling and
+      # unmarshalling the logger.
+      @configuration ||= Hatchet.configuration
+      @ndc ||= Hatchet::NestedDiagnosticContext.current
+
       msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
 
-      @appenders.each do |appender|
+      @configuration.appenders.each do |appender|
         if appender.enabled?(level, @context)
           begin
             appender.add(level, @context, msg)
@@ -407,7 +418,7 @@ module Hatchet
     # Writes messages to STDOUT if any appender fails to complete the check.
     #
     def enabled?(level)
-      @appenders.any? do |appender|
+      @configuration.appenders.any? do |appender|
         begin
           appender.enabled? level, @context
         rescue => e
