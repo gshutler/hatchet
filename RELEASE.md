@@ -1,5 +1,10 @@
 # Release notes
 
+## 0.2.8
+
+ * Added the ability to limit the number of lines of backtrace included by the
+   `BacktraceFormatter`
+
 ## 0.2.7
 
  * Hatchet can be marshalled to YAML safely (thanks to
