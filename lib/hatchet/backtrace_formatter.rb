@@ -23,6 +23,12 @@ module Hatchet
       @backtrace = value
     end
 
+    # Public: Gets and sets the number of lines to limit backtraces to.
+    #
+    # If set to nil, the entire backtrace will be used.
+    #
+    attr_accessor :backtrace_limit
+
     private
 
     # Private: Method that takes an already formatted message and appends the
@@ -39,8 +45,14 @@ module Hatchet
       error = message.error
 
       if self.backtrace && error && error.respond_to?(:backtrace)
-        indented_backtrace = error.backtrace.map { |line| "    #{line}" }.to_a
-        msg = ([msg] + indented_backtrace).join("\n")
+        backtrace = if backtrace_limit
+                      error.backtrace.take(backtrace_limit)
+                    else
+                      error.backtrace
+                    end
+
+        indented_backtrace = backtrace.map { |line| "    #{line}" }.to_a
+        msg = indented_backtrace.insert(0, msg).join("\n")
       end
 
       msg

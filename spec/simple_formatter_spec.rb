@@ -36,6 +36,20 @@ describe SimpleFormatter do
     foo.rb:20:b}, message
         end
 
+        describe 'with limited backtrace' do
+
+          before do
+            subject.backtrace_limit = 1
+          end
+
+          it 'outputs the message in the LEVEL - CONTEXT - MESSAGE format' do
+            message = subject.format(:info, 'Custom::Context', @message)
+            assert_equal %q{INFO - Custom::Context - Hello, World
+    foo.rb:1:a}, message
+          end
+
+        end
+
       end
 
       describe 'with backtraces disabled' do
