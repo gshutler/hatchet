@@ -74,11 +74,13 @@ module Hatchet
     #
     def levels_cache
       @_levels_cache ||= begin
-        levels = Hash.new do |hash, key|
+        new_cache = Hash.new do |hash, key|
           hash[key] = level_for_context(key)
         end
-        self.levels.each { |k, v| levels[k] = v }
-        levels
+        self.levels.each { |k, v| new_cache[k] = v }
+        # Ensure there is always a default fallback
+        new_cache[nil] = :info unless new_cache.include?(nil)
+        new_cache
       end
     end
 

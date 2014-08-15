@@ -8,6 +8,20 @@ describe LevelManager do
     @manager.extend LevelManager
   end
 
+  describe 'setting no default level' do
+    before do
+      # nothing
+    end
+
+    it 'has info messages enabled for any context' do
+      assert @manager.enabled?(:info, 'Foo::Bar')
+    end
+
+    it 'has debug messages disabled for any context' do
+      refute @manager.enabled?(:debug, 'Foo::Bar')
+    end
+  end
+
   describe 'setting a default level of info' do
     before do
       @manager.level :info
