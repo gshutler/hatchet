@@ -5,6 +5,55 @@ title: Hatchet
 
 # Release notes
 
+## 0.2.9
+
+ * Fixed a bug where if you specified appender-specific log levels without
+   providing a default to fall back to a `SystemStackError` would be raised
+
+## 0.2.8
+
+ * Added the ability to limit the number of lines of backtrace included by the
+   `BacktraceFormatter`
+
+## 0.2.7
+
+ * Hatchet can be marshalled to YAML safely (thanks to
+   [@gstark](https://github.com/gstark))
+
+## 0.2.6
+
+ * Log messages can be objects deferring to `to_s` (thanks to
+   [@gstark](https://github.com/gstark))
+
+## 0.2.5
+
+ * Rails 4.0 compatibility
+
+## 0.2.2
+
+ * Achieved a [4.0 GPA on Code * Climate](https://codeclimate.com/github/gshutler/hatchet)
+   and resolved all warnings when running in `-w` mode
+
+## 0.2.1
+
+ * Changed the middleware to insert itself before `Rails::Rack::Logger` for
+   consistent behavior
+
+## 0.2.0
+
+ * Added nested diagnostic context and Rack middleware to clear it between
+   requests
+
+### Note
+
+The `Hatchet::Message` constructor has been altered, going forward it will take
+a Hash of arguments instead of fixed arguments. It is currently backwards
+compatible but this will likely be dropped for 1.0.0 so it is advised you update
+your libraries now.
+
+This should only affect custom formatters which may want to take advantage of
+the nested diagnostic context which is now available anyway.
+
 ## 0.1.0
 
 No changes from 0.0.20, just time for a minor version release.
