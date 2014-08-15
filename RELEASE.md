@@ -1,5 +1,10 @@
 # Release notes
 
+## 0.2.9
+
+ * Fixed a bug where if you specified appender-specific log levels without
+   providing a default to fall back to a `SystemStackError` would be raised
+
 ## 0.2.8
 
  * Added the ability to limit the number of lines of backtrace included by the
