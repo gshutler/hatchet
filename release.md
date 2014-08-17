@@ -5,6 +5,24 @@ title: Hatchet
 
 # Release notes
 
+## 0.2.10
+
+* Introduced the ability to filter backtraces
+
+Example:
+
+    configuration.configure do |config|
+      config.backtrace_filter '/applications/my_app/releases/current' => '[ROOT]'
+    end
+
+Will filter a backtrace line like:
+
+    /applications/my_app/releases/current/lib/example.rb:42:in `main'
+
+Into:
+
+    [ROOT]/lib/example.rb:42:in `main'
+
 ## 0.2.9
 
  * Fixed a bug where if you specified appender-specific log levels without
