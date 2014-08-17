@@ -395,8 +395,8 @@ module Hatchet
           begin
             appender.add(level, @context, msg)
           rescue => e
-            puts "Failed to log message for #{@context} with appender #{appender} - #{level} - #{msg}\n"
-            puts "#{e}\n"
+            STDERR.puts "Failed to log message for #{@context} with appender #{appender} - #{level} - #{msg}\n"
+            STDERR.puts "#{e}\n"
           end
         end
       end
