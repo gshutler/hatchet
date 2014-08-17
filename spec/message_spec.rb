@@ -105,6 +105,58 @@ describe Message do
     end
   end
 
+  describe 'filtering backtraces' do
+    def generate_error
+      raise 'Example failure'
+    rescue => e
+      e
+    end
+
+    let(:dirname) { File.dirname(__FILE__) }
+    let(:error) { generate_error }
+
+    let(:subject) do
+      Message.new(error: generate_error, backtrace_filters: backtrace_filters)
+    end
+
+    require 'rbconfig'
+
+    describe 'string keys' do
+      let(:backtrace_filters) do
+        {
+          dirname => '$DIRNAME',
+          RbConfig::CONFIG['rubylibdir'] => '$RUBYLIBDIR',
+        }
+      end
+
+      it 'replaces the matching keys' do
+        backtrace = subject.error.backtrace
+
+        backtrace_filters.each do |prefix, replacement|
+          refute backtrace.find { |line| line.start_with? prefix }, "Backtrace should not have a line starting '#{prefix}'\n\t#{backtrace.join("\n\t")}"
+        end
+      end
+    end
+
+    describe 'array keys' do
+      let(:backtrace_filters) do
+        {
+          [dirname, RbConfig::CONFIG['rubylibdir']] => '$REPLACEMENT',
+        }
+      end
+
+      it 'replaces the matching keys' do
+        backtrace = subject.error.backtrace
+
+        backtrace_filters.each do |prefixes, replacement|
+          prefixes.each do |prefix|
+            refute backtrace.find { |line| line.start_with? prefix }, "Backtrace should not have a line starting '#{prefix}'\n\t#{backtrace.join("\n\t")}"
+          end
+        end
+      end
+    end
+  end
+
   if ENV["BENCH"] then
     describe 'benchmarks' do
       let(:subject) { Message.new(ndc: [], message: 'Evaluated') }

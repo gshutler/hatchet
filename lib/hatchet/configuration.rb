@@ -20,6 +20,34 @@ module Hatchet
       reset!
     end
 
+    # Public: Adds backtrace filters provided in the form of a Hash.
+    #
+    # Each line of the backtrace starting with a key is replaced by its
+    # corresponding value.
+    #
+    # Example
+    #
+    #   configuration.configure do |config|
+    #     config.backtrace_filter '/applications/my_app/releases/current' => '$ROOT'
+    #   end
+    #
+    # Will filter a backtrace line like:
+    #
+    #   /applications/my_app/releases/current/lib/example.rb:42:in `main'
+    #
+    # Into:
+    #
+    #   $ROOT/lib/example.rb:42:in `main'
+    #
+    # Returns nothing.
+    #
+    def backtrace_filter(filters = nil)
+      @backtrace_filters.merge!(filters) if filters
+      @backtrace_filters
+    end
+
+    alias_method :backtrace_filters, :backtrace_filter
+
     # Public: Returns the default formatter given to the appenders that have not
     # had their formatter explicitly set.
     #
@@ -39,6 +67,7 @@ module Hatchet
     # Public: Resets the configuration's internal state to the defaults.
     #
     def reset!
+      @backtrace_filters = {}
       @levels = { nil => :info }
       @appenders = []
 

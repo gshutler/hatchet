@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 
+require 'delegate'
+
 module Hatchet
 
   # Public: Class for wrapping message strings and blocks in a way that means
@@ -14,6 +16,28 @@ module Hatchet
   # Blocks will be lazily evaluated once for all appenders when required.
   #
   class Message
+
+    class ErrorDecorator < SimpleDelegator
+      def initialize(error, backtrace_filters)
+        super(error)
+        @error = error
+        @backtrace_filters = backtrace_filters
+      end
+
+      def backtrace
+        @backtrace ||= @error.backtrace.map { |line| __filtered_line(line) }
+      end
+
+      def __filtered_line(line)
+        @backtrace_filters.each do |prefixes, replacement|
+          Array[*prefixes].each do |prefix|
+            return replacement + line[prefix.length..-1] if line.start_with?(prefix)
+          end
+        end
+
+        line
+      end
+    end
 
     # Public: Gets the error associated with this message, if given.
     #
@@ -65,12 +89,13 @@ module Hatchet
         @message = args[:message] unless block
       else
         # Otherwise assume the old format and coerce args accordingly.
-        @ndc = []
-        @error = error
+        @ndc     = []
+        @error   = error
         @message = args unless block
       end
 
-      @block   = block
+      @error = ErrorDecorator.new(@error, args[:backtrace_filters]) if @error && args[:backtrace_filters]
+      @block = block
     end
 
     # Public: Returns the String representation of the message.

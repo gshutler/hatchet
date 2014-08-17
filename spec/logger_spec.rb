@@ -60,7 +60,8 @@ describe HatchetLogger do
           subject.send level, message, error
           received = appender.messages.last
 
-          assert error == received.message.error
+          # Use __getobj__ as wrapped by delegator
+          assert error == received.message.error.__getobj__
         end
       end
     end

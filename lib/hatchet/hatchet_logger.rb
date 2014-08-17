@@ -388,7 +388,7 @@ module Hatchet
       @configuration ||= Hatchet.configuration
       @ndc ||= Hatchet::NestedDiagnosticContext.current
 
-      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, &block)
+      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, backtrace_filters: @configuration.backtrace_filters, &block)
 
       @configuration.appenders.each do |appender|
         if appender.enabled?(level, @context)
