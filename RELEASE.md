@@ -1,18 +1,22 @@
 # Release notes
 
+## 0.2.11
+
+ * Railtie no longer tries to replace the asset logger when it is not present
+
 ## 0.2.10
 
-* Introduced the ability to filter backtraces
+ * Introduced the ability to filter backtraces
 
-Example:
+   Example:
 
-    configuration.configure do |config|
-      config.backtrace_filter '/applications/my_app/releases/current' => '[ROOT]'
-    end
+       configuration.configure do |config|
+         config.backtrace_filter '/applications/my_app/releases/current' => '[ROOT]'
+       end
 
-Will filter a backtrace line like:
+   Will filter a backtrace line like:
 
-    /applications/my_app/releases/current/lib/example.rb:42:in `main'
+       /applications/my_app/releases/current/lib/example.rb:42:in `main'
 
 Into:
 
