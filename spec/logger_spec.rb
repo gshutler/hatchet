@@ -21,34 +21,34 @@ describe HatchetLogger do
 
   ALL_LEVELS.each do |level|
     describe "receiving #{level} messages" do
-      let(:message) { "#{level} message" }
+      let(:message_text) { "#{level} message" }
 
       it 'should store pre-evaluated messages' do
-        subject.send level, message
+        subject.send level, message_text
         received = appender.messages.last
 
         assert level == received.level
         assert context.class == received.context
-        assert message == received.message.to_s
+        assert message_text == received.message.to_s
       end
 
       it 'should store block messages' do
-        subject.send(level) { message }
+        subject.send(level) { message_text }
         received = appender.messages.last
 
         assert level == received.level
         assert context.class == received.context
-        assert message == received.message.to_s
+        assert message_text == received.message.to_s
       end
 
       it 'should not call the disabled appender' do
-        subject.send level, message
+        subject.send level, message_text
 
         refute disabled_appender.add_called
       end
 
       it 'should return nil from the call' do
-        returned = subject.send(level, message)
+        returned = subject.send(level, message_text)
 
         assert returned.nil?, 'logging calls should return nil'
       end
@@ -57,7 +57,7 @@ describe HatchetLogger do
         let(:error) { StandardError.new }
 
         it 'should pass the error through to the appender' do
-          subject.send level, message, error
+          subject.send level, message_text, error
           received = appender.messages.last
 
           # Use __getobj__ as wrapped by delegator

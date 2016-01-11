@@ -14,4 +14,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Hatchet::VERSION
   gem.license       = 'MIT'
+  gem.add_development_dependency 'minitest', '~> 5.0'
 end
