@@ -74,6 +74,9 @@ module Hatchet
     end
 
     def self.wrap_asset_logging(app)
+      # Do nothing if asset pipeline not enabled
+      return unless Rails.application.assets
+
       # Initially replace it with the application logger as it's better for
       # this to be done if the next part fails.
       #
