@@ -8,19 +8,19 @@
 
  * Introduced the ability to filter backtraces
 
-   Example:
+     Example:
 
-       configuration.configure do |config|
-         config.backtrace_filter '/applications/my_app/releases/current' => '[ROOT]'
-       end
+         configuration.configure do |config|
+           config.backtrace_filter '/applications/my_app/releases/current' => '[ROOT]'
+         end
 
-   Will filter a backtrace line like:
+     Will filter a backtrace line like:
 
-       /applications/my_app/releases/current/lib/example.rb:42:in `main'
+         /applications/my_app/releases/current/lib/example.rb:42:in `main'
 
-Into:
+  Into:
 
-    [ROOT]/lib/example.rb:42:in `main'
+      [ROOT]/lib/example.rb:42:in `main'
 
 ## 0.2.9
 
