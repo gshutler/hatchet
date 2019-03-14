@@ -81,6 +81,8 @@ module Hatchet
     # block is preferred as it is assumed to provide more detail.
     #
     def initialize(args = {}, error = nil, &block)
+      @message = nil
+
       if args.kind_of? Hash
         # If args is a Hash then using new constructor format or no parameters
         # specified. Either way, use the new format.

@@ -421,7 +421,7 @@ module Hatchet
       @configuration.appenders.any? do |appender|
         begin
           appender.enabled? level, @context
-        rescue => e
+        rescue
           puts "Failed to check if level #{level} enabled for #{context} with appender #{appender}\n"
           false
         end
