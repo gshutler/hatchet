@@ -32,28 +32,41 @@ module Hatchet
     # The backtrace is only present if the message contains an error.
     #
     def format(level, context, message)
-      values = []
-      values << [:timestamp, timestamp]
-      values << [:level, format_level(level)]
-      values << [:pid, Process.pid.to_s]
+      msg = message.evaluated_message
+
+      case msg
+      when Hash
+        # Assume caller is following conventions
+        values = msg.dup
+        log_message = values.delete(:message)
+        log = {
+          :message => log_message.to_s.strip,
+          :values => values,
+        }
+      else
+        # Otherwise treat as String
+        log = { :message => msg.to_s.strip }
+      end
+
+      log[:timestamp] = timestamp
+      log[:level] = format_level(level)
+      log[:pid] = Process.pid
 
       unless Thread.current == Thread.main
-        values << [:thread, Thread.current.object_id.to_s]
+        log[:thread] = Thread.current.object_id
       end
 
-      values << [:context, context]
+      log[:context] = context
 
       if message.ndc.any?
-        values << [:ndc, message.ndc.to_a.map { |s| s.to_s }]
+        log[:ndc] = message.ndc.to_a
       end
-
-      values << [:message, message.to_s.strip]
 
       if message.error
-        values << [:error, structured_error(message.error)]
+        log[:error] = structured_error(message.error)
       end
 
-      JSON.generate(values.to_h)
+      JSON.generate(log.to_h)
     end
 
     private

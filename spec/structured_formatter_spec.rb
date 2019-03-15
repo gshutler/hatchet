@@ -8,9 +8,11 @@ describe StructuredFormatter do
   let(:subject) { StructuredFormatter.new }
 
   describe 'when formatting a message' do
+    let(:log_message) { 'Hello, World' }
+
     before do
       ndc = NestedDiagnosticContext::ContextStack.new([:foo, 12])
-      @message = Message.new(ndc: ndc, message: 'Hello, World')
+      @message = Message.new(ndc: ndc, message: log_message)
       @context = 'Custom::Context'
       @level   = :info
       @formatted_message = subject.format(@level, @context, @message)
@@ -20,9 +22,9 @@ describe StructuredFormatter do
       expected = {
         "timestamp" => Time.now.getutc.strftime(UTC_TIME_FORMAT),
         "level" => "INFO",
-        "pid" => Process.pid.to_s,
+        "pid" => Process.pid,
         "context" => @context,
-        "ndc" => ["foo", "12"],
+        "ndc" => ["foo", 12],
         "message" => @message.to_s.strip,
       }
 
@@ -39,7 +41,7 @@ describe StructuredFormatter do
         expected = {
           "timestamp" => Time.now.getutc.strftime(UTC_TIME_FORMAT),
           "level" => "INFO",
-          "pid" => Process.pid.to_s,
+          "pid" => Process.pid,
           "context" => @context,
           "message" => @message.to_s.strip,
           "error" => {
@@ -52,6 +54,31 @@ describe StructuredFormatter do
         formatted_message = subject.format(@level, @context, @message)
 
         assert_equal JSON.parse(formatted_message), expected
+      end
+    end
+
+    describe 'with a structured message' do
+      let(:log_message) do
+        {
+          :message => "Hi, there",
+          :other => 123,
+        }
+      end
+
+      it "encodes the message as JSON" do
+        expected = {
+          "timestamp" => Time.now.getutc.strftime(UTC_TIME_FORMAT),
+          "level" => "INFO",
+          "pid" => Process.pid,
+          "context" => @context,
+          "ndc" => ["foo", 12],
+          "message" => log_message[:message],
+          "values" => {
+            "other" => log_message[:other],
+          },
+        }
+
+        assert_equal JSON.parse(@formatted_message), expected
       end
     end
   end
