@@ -152,6 +152,11 @@ module Hatchet
         end
       end
 
+      # Internal: Returns a copy of the stack as an array.
+      #
+      def to_a
+        @stack.clone.to_a
+      end
     end
 
   end

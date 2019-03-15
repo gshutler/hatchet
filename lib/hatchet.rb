@@ -12,6 +12,7 @@ require_relative 'hatchet/nested_diagnostic_context'
 require_relative 'hatchet/plain_formatter'
 require_relative 'hatchet/simple_formatter'
 require_relative 'hatchet/standard_formatter'
+require_relative 'hatchet/structured_formatter'
 require_relative 'hatchet/version'
 
 # Public: Hatchet is a library for providing logging facilities whose levels are
