@@ -3,8 +3,6 @@
 require_relative 'spec_helper'
 
 describe StructuredFormatter do
-  UTC_TIME_FORMAT = '%Y-%m-%d %H:%M:%S.%LZ'
-
   let(:subject) { StructuredFormatter.new }
 
   describe 'when formatting a message' do
@@ -20,7 +18,7 @@ describe StructuredFormatter do
 
     it "encodes the message as JSON" do
       expected = {
-        "timestamp" => Time.now.getutc.strftime(UTC_TIME_FORMAT),
+        "timestamp" => Time.now.getutc.strftime(TIME_FORMAT),
         "level" => "INFO",
         "pid" => Process.pid,
         "context" => @context,
@@ -39,16 +37,14 @@ describe StructuredFormatter do
 
       it 'encodes the error' do
         expected = {
-          "timestamp" => Time.now.getutc.strftime(UTC_TIME_FORMAT),
+          "timestamp" => Time.now.getutc.strftime(TIME_FORMAT),
           "level" => "INFO",
           "pid" => Process.pid,
           "context" => @context,
           "message" => @message.to_s.strip,
-          "error" => {
-            "class" => "OpenStruct",
-            "message" => "Boom!",
-            "backtrace" => @message.error.backtrace,
-          },
+          "error_class" => "OpenStruct",
+          "error_message" => "Boom!",
+          "error_backtrace" => @message.error.backtrace,
         }
 
         formatted_message = subject.format(@level, @context, @message)
@@ -67,15 +63,13 @@ describe StructuredFormatter do
 
       it "encodes the message as JSON" do
         expected = {
-          "timestamp" => Time.now.getutc.strftime(UTC_TIME_FORMAT),
+          "timestamp" => Time.now.getutc.strftime(TIME_FORMAT),
           "level" => "INFO",
           "pid" => Process.pid,
           "context" => @context,
           "ndc" => ["foo", 12],
           "message" => log_message[:message],
-          "values" => {
-            "other" => log_message[:other],
-          },
+          "other" => log_message[:other],
         }
 
         assert_equal JSON.parse(@formatted_message), expected

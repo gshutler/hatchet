@@ -37,12 +37,7 @@ module Hatchet
       case msg
       when Hash
         # Assume caller is following conventions
-        values = msg.dup
-        log_message = values.delete(:message)
-        log = {
-          :message => log_message.to_s.strip,
-          :values => values,
-        }
+        log = msg.dup
       else
         # Otherwise treat as String
         log = { :message => msg.to_s.strip }
@@ -63,28 +58,23 @@ module Hatchet
       end
 
       if message.error
-        log[:error] = structured_error(message.error)
+        error = message.error
+
+        log[:error_class] = error.class.to_s
+        log[:error_message] = error.message
+        log[:error_backtrace]
+
+        if error.respond_to?(:backtrace)
+          backtrace = error.backtrace
+          backtrace = backtrace.take(backtrace_limit) if backtrace_limit
+          log[:error_backtrace] = backtrace
+        end
       end
 
       JSON.generate(log.to_h)
     end
 
     private
-
-    def structured_error(error)
-      details = {
-        :class => error.class.to_s,
-        :message => error.message,
-      }
-
-      if error.respond_to?(:backtrace)
-        backtrace = error.backtrace
-        backtrace = backtrace.take(backtrace_limit) if backtrace_limit
-        details[:backtrace] = backtrace
-      end
-
-      details
-    end
 
     # Private: Returns the current time as a String.
     #
@@ -102,7 +92,7 @@ module Hatchet
       end
 
       @millis = millis
-      @last = @date + "00#{millis}"[-3..-1] + "Z"
+      @last = @date + "00#{millis}"[-3..-1]
     end
 
     # Private: Returns the level formatted for log output as a String.
