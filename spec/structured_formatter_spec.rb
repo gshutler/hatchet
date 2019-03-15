@@ -44,7 +44,7 @@ describe StructuredFormatter do
           "message" => @message.to_s.strip,
           "error_class" => "OpenStruct",
           "error_message" => "Boom!",
-          "error_backtrace" => @message.error.backtrace,
+          "error_backtrace" => @message.error.backtrace.join("\n"),
         }
 
         formatted_message = subject.format(@level, @context, @message)

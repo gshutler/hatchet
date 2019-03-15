@@ -67,7 +67,7 @@ module Hatchet
         if error.respond_to?(:backtrace)
           backtrace = error.backtrace
           backtrace = backtrace.take(backtrace_limit) if backtrace_limit
-          log[:error_backtrace] = backtrace
+          log[:error_backtrace] = backtrace.join("\n")
         end
       end
 
