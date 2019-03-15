@@ -37,6 +37,10 @@ module Hatchet
 
         line
       end
+
+      def class
+        __getobj__.class
+      end
     end
 
     # Public: Gets the error associated with this message, if given.

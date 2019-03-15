@@ -155,6 +155,14 @@ describe Message do
         end
       end
     end
+
+    describe 'class' do
+      let(:backtrace_filters) { Hash.new }
+
+      it 'returns the class of the error' do
+        assert_equal subject.error.class, RuntimeError
+      end
+    end
   end
 
   if ENV["BENCH"] then
