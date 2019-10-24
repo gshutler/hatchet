@@ -64,6 +64,9 @@ module Hatchet
     #
     def add(level, context, message)
       @logger.send level, @formatter.format(level, context, message)
+    rescue => e
+      STDERR.puts "Failed to log message for #{context} with appender #{self} - #{level} - #{message}\n"
+      STDERR.puts "#{e}\n"
     end
 
   end
